@@ -72,8 +72,6 @@ export default class PWDDesktop {
     options.width = this.DEFAULT_WINDOW_WIDTH + 'px'
     options.height = this.DEFAULT_WINDOW_HEIGHT + 'px'
 
-    console.log('options to set' + options)
     return options
-
   }
 }

@@ -16,7 +16,14 @@ window.dt = dt
 dt.globalHeight = document.querySelector('.desktop').offsetHeight
 dt.globalWidth = document.querySelector('.desktop').offsetWidth
 
-document.querySelector('#chat-btn').addEventListener('click', function () { win.create('Chat') })
-document.querySelector('#memory-btn').addEventListener('click', function () { win.create('Memory') })
-document.querySelector('#game-btn').addEventListener('click', function () { win.create('Game') })
-document.querySelector('#clean-btn').addEventListener('click', function () { dt.refresh() })
+var clickHandler = function (event, name) { if (event.detail === 1) win.create(name) } // do nothing on dblclick
+
+document.querySelector('#chat-btn').addEventListener('click', (e) => { clickHandler(e, 'Chat') })
+document.querySelector('#memory-btn').addEventListener('click', (e) => { clickHandler(e, 'Memory') })
+document.querySelector('#game-btn').addEventListener('click', (e) => { clickHandler(e, 'Game') })
+document.querySelector('#clean-btn').addEventListener('click', (e) => { dt.refresh() })
+
+// dblclick handles click anyway - so, only one window will be created
+document.querySelector('#chat-btn').addEventListener('dblclick', function () { return false })
+document.querySelector('#memory-btn').addEventListener('dblclick', function () { return false })
+document.querySelector('#game-btn').addEventListener('dblclick', function () { return false })
