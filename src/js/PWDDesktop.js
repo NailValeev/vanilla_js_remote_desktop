@@ -14,6 +14,8 @@ export default class PWDDesktop {
     this.globalID = 0
     this.globalLeft = 20
     this.globalTop = 20
+    this.DEFAULT_WINDOW_HEIGHT = 200
+    this.DEFAULT_WINDOW_WIDTH = 300
   }
 
   /**
@@ -58,16 +60,19 @@ export default class PWDDesktop {
   getNewWindowOptions () {
     let options = {}
 
-    options.indexZ = ++this.indexZ
+    options.zIndex = ++this.indexZ
     options.id = ++this.globalID
 
-    this.globalLeft += 20
+    this.globalLeft = (this.globalLeft > this.globalWidth - this.DEFAULT_WINDOW_WIDTH) ? 20 : this.globalLeft += 20
     options.left = this.globalLeft + 'px'
 
-    this.globalTop += 20
+    this.globalTop = (this.globalTop > this.globalHeight - this.DEFAULT_WINDOW_HEIGHT) ? 20 : this.globalTop += 20
     options.top = this.globalTop + 'px'
 
-    console.log('options to set' + options.id)
+    options.width = this.DEFAULT_WINDOW_WIDTH + 'px'
+    options.height = this.DEFAULT_WINDOW_HEIGHT + 'px'
+
+    console.log('options to set' + options)
     return options
 
   }
