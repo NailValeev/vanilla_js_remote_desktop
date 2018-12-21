@@ -8,6 +8,21 @@
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
         <script type="module" src="js/app.js"></script>
         <link rel="stylesheet" href="css/style.css">
+
+        <template id="template-pwd-window">
+            <div class="window">
+                <div class="window-header">
+                    <img class="window-icon" />
+                    <span class="window-text">
+                    </span>
+                    <div class="window-buttons">
+                        <button type="button" class="close-button" title="Close"></button>
+                    </div>
+                </div>
+                <div class="window-content"></div>
+                <div class="window-footer"></div>
+            </div>
+        </template> 
     </head>
     <body>
         <div class="dock"> 
@@ -15,15 +30,19 @@
                 <ul class="osx-dock">
                     <li>    
                         <span>Chat</span>
-                        <a href="" id="chat-btn"><img src="image/linux.png" /></a>
+                        <a id="chat-btn"><img src="image/chat.png" /></a>
                     </li>
                     <li>
                         <span>Memory</span>
-                        <a href="" id="memory-btn"><img src="image/chrome.png" /></a>
+                        <a id="memory-btn"><img src="image/memory.png" /></a>
                     </li>
                     <li>
                         <span>Game</span>
-                        <a href="" id="game-btn"><img src="image/safari.png" /></a>
+                        <a id="game-btn"><img src="image/game.png" /></a>
+                    </li>                 
+                    <li>
+                        <span>Clean</span>
+                        <a id="clean-btn"><img src="image/close-all.png" /></a>
                     </li>                 
                 </ul>
             </div>

@@ -37,11 +37,14 @@ body {
     display: block;
     margin: 0 auto;
 }
-
+/*
+I can change z-index dinamycally via JS, in order to display deck on the top, 
+but I want to follow KISS principe
+*/
 .dock {
     position: absolute;
     bottom: 0;
-    z-index: 999999;
+    z-index: 999999999;
     width: 100%;
 }
 
@@ -86,4 +89,13 @@ ul.osx-dock li span {
 
 ul.osx-dock li:hover span {
     display: block;
+}
+
+.window {
+    background-color: lightgrey;
+	width: 300px;
+	height: 200px;
+    position: absolute;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.2);
+	opacity: 1;
 }

@@ -5,10 +5,16 @@
  * @version 1.1.0
  */
 
-'use strict'
+import PWDDesktop from './PWDDesktop.js'
+import { PWDWindow } from './PWDWindow.js';
 
-import Desktop from './desktop.js'
-
-var dt = new Desktop()
+var dt = new PWDDesktop()
+var win = new PWDWindow()
 
 dt.create()
+window.dt = dt
+
+document.querySelector('#chat-btn').addEventListener('click', function () { win.create('Chat') })
+document.querySelector('#memory-btn').addEventListener('click', function () { win.create('Memory') })
+document.querySelector('#game-btn').addEventListener('click', function () { win.create('Game') })
+document.querySelector('#clean-btn').addEventListener('click', function () { dt.refresh() })
