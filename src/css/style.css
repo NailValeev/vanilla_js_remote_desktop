@@ -196,7 +196,29 @@ ul.osx-dock li:hover span {
     background-position: center center;
 }
 
-
 .suit { 
     background-image : url("../image/0.jpg");
 }
+
+.alert-msg {
+    color: red;
+    font-size: 30pt;
+    text-align: center;
+    text-shadow: 2px 2px darkred;
+}
+
+.alert-img-holder {
+    height: 250px;
+    width: 250px;
+    display: block;
+    margin: auto;
+}
+
+.alert-winner-holder {
+    background-image: url("../image/win.jpg")
+}
+
+.alert-loser-holder {
+    background-image: url("../image/lose.jpg")
+}
+

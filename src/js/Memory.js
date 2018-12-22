@@ -42,11 +42,12 @@ export default class Memory extends PWDWindow {
     this.cols = cols || 2
 
     this.turnedCards = []
-    
+    this.turnedCardsCounter = 0
+
     this.guessedCounter = 0
 
-    let numberOfCards = this.rows * this.cols
-    this.carsdArray = new Deck(numberOfCards).getDeck()
+    this.numberOfCards = this.rows * this.cols
+    this.carsdArray = new Deck(this.numberOfCards).getDeck()
 
     let board = document.createElement('div')
     board.classList.toggle('memory-board')
@@ -68,7 +69,7 @@ export default class Memory extends PWDWindow {
         newCard.classList.toggle('suit')
         newCard.setAttribute('id', this.carsdArray[cardIndex].id)
         newCard.setAttribute('name', this.carsdArray[cardIndex].picId)
-        newCard.addEventListener('click', (e) => { this.turn(e.target) })
+        newCard.addEventListener('click', (e) => { if (this.turnedCardsCounter < 2) this.turn(e.target) })
         newRow.appendChild(newCard)
         cardIndex++
       }
@@ -76,8 +77,39 @@ export default class Memory extends PWDWindow {
     }
   }
 
+  message (message, winnerFlag) {
+    console.log('winner: ' + winnerFlag)
+
+    let board = document.createElement('div')
+    board.classList.toggle('memory-board')
+
+    while (this.gameBoard.childElementCount > 0) {
+      this.gameBoard.removeChild(this.gameBoard.firstChild) // To clear old game
+    }
+
+    this.gameBoard.appendChild(board)
+
+    let infoSpan = document.createElement('span')
+    infoSpan.classList.toggle('alert-msg')
+    infoSpan.innerHTML = message
+
+    let ImgDiv = document.createElement('div')
+    ImgDiv.classList.toggle('alert-img-holder')
+
+    if (winnerFlag) { 
+      ImgDiv.classList.toggle('alert-winner-holder')
+    } else {
+      ImgDiv.classList.toggle('alert-loser-holder')
+    }
+
+    board.appendChild(infoSpan)
+    board.appendChild(ImgDiv)
+  }
+
   turn (card) {
+    this.turnedCardsCounter++
     if (!card.classList.contains('suit')) return // already turned
+
     card.classList.toggle('suit')
     let cardID = card.id.substring(1)
     let bckgrndUrl = 'url(../image/' + cardID + '.jpg'
@@ -102,6 +134,14 @@ export default class Memory extends PWDWindow {
           oldCard.style.backgroundImage = 'url(../image/0.jpg'
         }
         this.turnedCards = []
+        this.turnedCardsCounter = 0
+        if (this.guessedCounter === this.numberOfCards) {
+          card.classList.toggle('suit')
+          card.style.backgroundImage = 'url(../image/0.jpg'
+          oldCard.classList.toggle('suit')
+          oldCard.style.backgroundImage = 'url(../image/0.jpg'
+          this.message('YOU WIN !!!', true)
+        }
       } else {
         this.turnedCards.push(card)
       }
