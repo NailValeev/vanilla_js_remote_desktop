@@ -170,12 +170,12 @@ ul.osx-dock li:hover span {
 }
 
 .app-button {
-  background-color: lightgrey;
-  padding: 2px 5px;
-  border: 2pz solid grey;
-  border-radius: 5px; 
-  box-shadow: 0px -1px 2px 0 #333 inset,
-  0px 1px 1px 1px #555;
+    background-color: lightgrey;
+    padding: 2px 5px;
+    border-radius: 5px; 
+    box-shadow: 0px -1px 2px 0 #333 inset,
+    0px 1px 1px 1px #555;
+    margin: 0 10px;
 }
 
 .app-info { 
@@ -183,23 +183,20 @@ ul.osx-dock li:hover span {
 }
 
 .memory-row { 
-    padding: 5px ;
+    padding: 3px ;
 }
 
 .memory-card { 
     width: 60px;
     height: 60px;
     display: inline-block;
-    margin: 5px 10px;
-    background-image : url("../image/0.jpg");
+    margin: 3px 6px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
 }
 
-.memory-board { 
-    width: 90%;
-    height: 90%;
-    display: block;
-    margin: auto;
+
+.suit { 
+    background-image : url("../image/0.jpg");
 }

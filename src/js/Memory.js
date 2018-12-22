@@ -22,8 +22,9 @@ export default class Memory extends PWDWindow {
 
     let gameFrame = document.querySelector('#template-app').content.cloneNode(true)
 
-    let run44 = gameFrame.querySelector('#run44')
-    run44.addEventListener('click', function (e) { self.init(4, 4) })
+    gameFrame.querySelector('#run44').addEventListener('click', function (e) { self.init(4, 4) })
+    gameFrame.querySelector('#run22').addEventListener('click', function (e) { self.init(2, 2) })
+    gameFrame.querySelector('#run24').addEventListener('click', function (e) { self.init(2, 4) })
 
     this.gameBody = gameFrame.querySelector('.app-body')
     this.gameBody.classList.toggle('memory-body')
@@ -40,11 +41,19 @@ export default class Memory extends PWDWindow {
     this.rows = rows || 2
     this.cols = cols || 2
 
+    this.turnedCards = []
+    
+    this.guessedCounter = 0
+
     let numberOfCards = this.rows * this.cols
     this.carsdArray = new Deck(numberOfCards).getDeck()
 
     let board = document.createElement('div')
     board.classList.toggle('memory-board')
+
+    while (this.gameBoard.childElementCount > 0) {
+      this.gameBoard.removeChild(this.gameBoard.firstChild) // To clear old game
+    }
 
     this.gameBoard.appendChild(board)
 
@@ -56,13 +65,46 @@ export default class Memory extends PWDWindow {
       for (let k = 0; k < this.cols; k++) {
         let newCard = document.createElement('div')
         newCard.classList.toggle('memory-card')
+        newCard.classList.toggle('suit')
         newCard.setAttribute('id', this.carsdArray[cardIndex].id)
         newCard.setAttribute('name', this.carsdArray[cardIndex].picId)
-        // newCard.style.backgroundImage = "url('image/0.jpg')"
+        newCard.addEventListener('click', (e) => { this.turn(e.target) })
         newRow.appendChild(newCard)
         cardIndex++
       }
       board.appendChild(newRow)
     }
+  }
+
+  turn (card) {
+    if (!card.classList.contains('suit')) return // already turned
+    card.classList.toggle('suit')
+    let cardID = card.id.substring(1)
+    let bckgrndUrl = 'url(../image/' + cardID + '.jpg'
+    card.style.backgroundImage = bckgrndUrl
+
+    if (this.turnedCards.length > 1) return // Quick user clicks more than 2 cards :)
+    setTimeout(() => {
+      if (this.turnedCards.length > 0) { // 0 or 1, no more
+        // Compare current card with card from array
+        let oldCard = this.turnedCards[0]
+        let oldCardID = this.turnedCards[0].id.substring(1)
+        if (oldCardID === cardID) { // Match!
+          this.guessedCounter += 2
+          card.removeEventListener('click', (e) => { this.turn(e.target) })
+          card.style.backgroundImage = 'none'
+          oldCard.removeEventListener('click', (e) => { this.turn(e.target) })
+          oldCard.style.backgroundImage = 'none'
+        } else {
+          card.classList.toggle('suit')
+          card.style.backgroundImage = 'url(../image/0.jpg'
+          oldCard.classList.toggle('suit')
+          oldCard.style.backgroundImage = 'url(../image/0.jpg'
+        }
+        this.turnedCards = []
+      } else {
+        this.turnedCards.push(card)
+      }
+    }, 500)
   }
 }
