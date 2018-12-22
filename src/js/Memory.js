@@ -30,6 +30,9 @@ export default class Memory extends PWDWindow {
     this.gameBody.classList.toggle('memory-body')
     this.gameBoard = gameFrame.querySelector('.app-board')
     this.infoBlock = gameFrame.querySelector('.app-info')
+    this.timerBlock = gameFrame.querySelector('.app-timer')
+
+    this.timerBlock.innerHTML = ''
 
     holder.appendChild(gameFrame)
 
@@ -46,7 +49,9 @@ export default class Memory extends PWDWindow {
     this.turnedCardsCounter = 0
     this.guessedCounter = 0
     this.attemptCounter = 0
+    this.countdown = 30
     this.infoBlock.innerHTML = ''
+    this.timerBlock.innerHTML = ''
 
     this.numberOfCards = this.rows * this.cols
     this.carsdArray = new Deck(this.numberOfCards).getDeck()
@@ -77,6 +82,7 @@ export default class Memory extends PWDWindow {
       }
       board.appendChild(newRow)
     }
+    this.startTimer()
   }
 
   message (message, winnerFlag) {
@@ -98,7 +104,7 @@ export default class Memory extends PWDWindow {
     let ImgDiv = document.createElement('div')
     ImgDiv.classList.toggle('alert-img-holder')
 
-    if (winnerFlag) { 
+    if (winnerFlag) {
       ImgDiv.classList.toggle('alert-winner-holder')
     } else {
       ImgDiv.classList.toggle('alert-loser-holder')
@@ -145,11 +151,42 @@ export default class Memory extends PWDWindow {
           card.style.backgroundImage = 'url(../image/0.jpg'
           oldCard.classList.toggle('suit')
           oldCard.style.backgroundImage = 'url(../image/0.jpg'
+          this.pause()
           this.message('YOU WIN !!!', true)
         }
       } else {
         this.turnedCards.push(card)
       }
     }, 500)
+  }
+
+  /**
+  * Handling UI elements and the countdown functionality
+  *
+  * @param {none}
+  * @throws {none} nothing to throw, if any UI error, will be catched by 'onerror' event listener
+  * @returns {undefined} void
+  */
+  startTimer () {
+    let self = this
+    this.intervalHandler = setInterval(function () {
+      if (self.countdown === 0) {
+        clearInterval(self.intervalHandler)
+        self.message('YOU LOSE !!!', false)
+      }
+      self.timerBlock.innerHTML = self.countdown
+      self.countdown--
+    }, 1000)
+  }
+
+  /**
+  * To stop the timer / countdowns
+  *
+  * @param {none}
+  * @throws {none} nothing to throw, if any UI error, will be catched by 'onerror' event listener
+  * @returns {undefined} void
+  */
+  pause () {
+    clearInterval(this.intervalHandler)
   }
 }
