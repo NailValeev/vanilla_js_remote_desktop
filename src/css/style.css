@@ -222,3 +222,12 @@ ul.osx-dock li:hover span {
     background-image: url("../image/lose.jpg")
 }
 
+.app-info {
+    color: lightgreen;
+    font-size: 10pt;
+    text-align: center;
+    text-shadow: 2px 2px darkgreen;
+    margin-top: 10px;
+
+}
+

@@ -29,6 +29,7 @@ export default class Memory extends PWDWindow {
     this.gameBody = gameFrame.querySelector('.app-body')
     this.gameBody.classList.toggle('memory-body')
     this.gameBoard = gameFrame.querySelector('.app-board')
+    this.infoBlock = gameFrame.querySelector('.app-info')
 
     holder.appendChild(gameFrame)
 
@@ -43,8 +44,9 @@ export default class Memory extends PWDWindow {
 
     this.turnedCards = []
     this.turnedCardsCounter = 0
-
     this.guessedCounter = 0
+    this.attemptCounter = 0
+    this.infoBlock.innerHTML = ''
 
     this.numberOfCards = this.rows * this.cols
     this.carsdArray = new Deck(this.numberOfCards).getDeck()
@@ -107,6 +109,9 @@ export default class Memory extends PWDWindow {
   }
 
   turn (card) {
+    this.attemptCounter++
+    this.infoBlock.innerHTML = 'Attempts : ' + this.attemptCounter
+
     this.turnedCardsCounter++
     if (!card.classList.contains('suit')) return // already turned
 
