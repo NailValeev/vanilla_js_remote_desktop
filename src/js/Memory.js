@@ -9,8 +9,8 @@ import { PWDWindow } from './PWDWindow.js'
 import Deck from './Deck.js'
 
 export default class Memory extends PWDWindow {
-  constructor (n) {
-    super('Memory')
+  constructor (gameId) {
+    super('Memory', gameId)
   }
 
   init (rows, cols) {

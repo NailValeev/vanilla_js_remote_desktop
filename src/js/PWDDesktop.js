@@ -4,8 +4,7 @@
  * @version 1.1.0
  */
 
-import Memory from './Memory.js';
-import { PWDWindow } from './PWDWindow.js';
+import Memory from './Memory.js'
 
 export default class PWDDesktop {
   /**
@@ -18,6 +17,8 @@ export default class PWDDesktop {
     this.globalTop = 20
     this.DEFAULT_WINDOW_HEIGHT = 200
     this.DEFAULT_WINDOW_WIDTH = 300
+
+    this.memoryGameCounter = 0
   }
 
   /**
@@ -50,6 +51,8 @@ export default class PWDDesktop {
     this.globalID = 0
     this.globalLeft = 20
     this.globalTop = 20
+
+    this.memoryGameCounter = 0
   }
 
   /**
@@ -78,6 +81,28 @@ export default class PWDDesktop {
   }
 
   /**
+  * Returns incremented z-index to stack the windows properly
+  *
+  * @param {none}
+  * @throws {none} nothing crucial to throw
+  * @returns {number} z-index for window to be placed on the top
+  */
+  getNextZ () {
+    return ++this.indexZ
+  }
+
+  /**
+  * Returns z-index to stack the windows properly
+  *
+  * @param {none}
+  * @throws {none} nothing crucial to throw
+  * @returns {number} z-index to compare with z-index
+  */
+  getCurrentZ () {
+    return this.indexZ
+  }
+
+  /**
   * Returns increased indexZ to stack the windows properly
   *
   * @param {none}
@@ -85,7 +110,8 @@ export default class PWDDesktop {
   * @returns {Object options} options for new window
   */
   startMemory (rows, lines) {
-    let memoryGame = new Memory()
+    this.memoryGameCounter++
+    let memoryGame = new Memory(this.memoryGameCounter)
     memoryGame.init(rows, lines)
   }
 }
