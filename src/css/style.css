@@ -128,6 +128,13 @@ ul.osx-dock li:hover span {
     float: right;
 }
 
+.window-content {
+    height:  calc(100% - 22px);
+    border-bottom: 1px solid #f3f1f3;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
 .close-button {
     background: #ff5c5c;
     font-size: 9pt;
@@ -138,4 +145,61 @@ ul.osx-dock li:hover span {
     display: inline-block;
     color: darkred;
     cursor: default;
+}
+
+.app-body {
+   height: 100%;
+   width: 100%;
+   border-bottom-left-radius: 6px;
+   border-bottom-right-radius: 6px;
+}
+
+.memory-body {
+   background-color: olivedrab; 
+}
+
+.app-menu {
+   height: 10%;
+   width: 100%;
+}
+
+.app-buttons {
+    line-height: 20px;
+    float: center;
+    padding: 5px;
+}
+
+.app-button {
+  background-color: lightgrey;
+  padding: 2px 5px;
+  border: 2pz solid grey;
+  border-radius: 5px; 
+  box-shadow: 0px -1px 2px 0 #333 inset,
+  0px 1px 1px 1px #555;
+}
+
+.app-info { 
+    height: 10%;
+}
+
+.memory-row { 
+    padding: 5px ;
+}
+
+.memory-card { 
+    width: 60px;
+    height: 60px;
+    display: inline-block;
+    margin: 5px 10px;
+    background-image : url("../image/0.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+}
+
+.memory-board { 
+    width: 90%;
+    height: 90%;
+    display: block;
+    margin: auto;
 }

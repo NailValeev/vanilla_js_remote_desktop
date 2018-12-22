@@ -15,8 +15,8 @@ export default class PWDDesktop {
     this.globalID = 0
     this.globalLeft = 20
     this.globalTop = 20
-    this.DEFAULT_WINDOW_HEIGHT = 200
-    this.DEFAULT_WINDOW_WIDTH = 300
+    this.DEFAULT_WINDOW_HEIGHT = 400
+    this.DEFAULT_WINDOW_WIDTH = 400
 
     this.memoryGameCounter = 0
   }
@@ -112,6 +112,6 @@ export default class PWDDesktop {
   startMemory (rows, lines) {
     this.memoryGameCounter++
     let memoryGame = new Memory(this.memoryGameCounter)
-    memoryGame.init(rows, lines)
+    memoryGame.begin()
   }
 }

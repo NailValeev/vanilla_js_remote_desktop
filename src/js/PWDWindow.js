@@ -24,8 +24,8 @@ class PWDWindow {
     win.setAttribute('id', this.domId)
     win.querySelector('span').innerHTML = name + ' ' + gameId
     win.querySelector('.window-icon').src = 'image/' + name.toLowerCase() + '.png'
-    win.querySelector('.close-button').addEventListener('click', function () { self.close('#' + self.domId) })
-    win.querySelector('.window-header').addEventListener('click', function () { self.toTheTop('#' + self.domId) })
+    win.querySelector('.close-button').addEventListener('click', function (e) { self.close('#' + self.domId, e) })
+    win.addEventListener('click', function (e) { self.toTheTop('#' + self.domId) })
 
     win.style.zIndex = this.options.zIndex
     win.style.left = this.options.left
@@ -35,9 +35,10 @@ class PWDWindow {
     // win.style = options (incorrect, data set contains id)
   }
 
-  close (elementId) {
+  close (elementId, e) {
     console.log('closing window ' + elementId)
     this.desktop.removeChild(document.querySelector(elementId))
+    e.stopPropagation()
   }
 
   toTheTop (elementId) {

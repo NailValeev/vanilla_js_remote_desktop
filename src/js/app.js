@@ -14,7 +14,7 @@ dt.globalHeight = document.querySelector('.desktop').offsetHeight
 dt.globalWidth = document.querySelector('.desktop').offsetWidth
 
 // var clickHandler = function (event, name) { if (event.detail !== 2) win.create(name) } // do nothing on dblclick
-var clickMemory = function (event) { if (event.detail !== 2) dt.startMemory(2, 2) } // do nothing on dblclick
+var clickMemory = function (event) { if (event.detail !== 2) dt.startMemory() } // do nothing on dblclick
 
 // document.querySelector('#chat-btn').addEventListener('click', (e) => { clickHandler(e, 'Chat') })
 document.querySelector('#memory-btn').addEventListener('click', (e) => { clickMemory(e) })
