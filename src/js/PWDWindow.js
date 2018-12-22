@@ -11,35 +11,36 @@ class PWDWindow {
   *
   * @param {none}
   * @throws {none} nothing crucial to throw
-  * @returns {undefined} void
+  * @returns {NodeModule templ} window - holder for any application
   */
-  create (name) {
-    let desktop = document.querySelector('.desktop')
+  constructor (name) {
+    let self = this
+    this.desktop = document.querySelector('.desktop')
+    this.options = window.dt.getNewWindowOptions()
 
-    var options = window.dt.getNewWindowOptions()
-    let domId = 'window' + options.id
-    let templ = document.querySelector('#template-pwd-window').content.cloneNode(true)
-    let win = templ.querySelector('.window')
-    win.setAttribute('id', domId)
+    this.domId = 'window' + this.options.id
+    this.templ = document.querySelector('#template-pwd-window').content.cloneNode(true)
+    let win = this.templ.querySelector('.window')
+    win.setAttribute('id', this.domId)
     win.querySelector('span').innerHTML = name
     win.querySelector('.window-icon').src = 'image/' + name.toLowerCase() + '.png'
-    win.querySelector('.close-button').addEventListener('click', function () {
-      desktop.removeChild(document.querySelector('#' + domId))
-    })
+    win.querySelector('.close-button').addEventListener('click', function () { self.close('#' + self.domId) })
 
-    win.style.zIndex = options.zIndex
-    win.style.left = options.left
-    win.style.top = options.top
-    win.style.width = options.width
-    win.style.height = options.height
+    win.style.zIndex = this.options.zIndex
+    win.style.left = this.options.left
+    win.style.top = this.options.top
+    win.style.width = this.options.width
+    win.style.height = this.options.height
     // win.style = options (data set contains id)
-
-    desktop.appendChild(templ)
   }
 
-  close (elem) {
-    let desktop = document.querySelector('.desktop')
-    desktop.removeChild(elem)
+  close (elementId) {
+    console.log('closing window ' + elementId)
+    this.desktop.removeChild(document.querySelector(elementId))
+  }
+
+  expose () {
+    this.desktop.appendChild(this.templ)
   }
 }
 

@@ -3,7 +3,9 @@
  * @author Nail Valeev
  * @version 1.1.0
  */
-import { PWDWindow } from './PWDWindow.js'
+
+import Memory from './Memory.js';
+import { PWDWindow } from './PWDWindow.js';
 
 export default class PWDDesktop {
   /**
@@ -51,7 +53,7 @@ export default class PWDDesktop {
   }
 
   /**
-  * Returns increased indexZ to stack the windows properly
+  * Returns options to stack the windows properly
   *
   * @param {none}
   * @throws {none} nothing crucial to throw
@@ -73,5 +75,17 @@ export default class PWDDesktop {
     options.height = this.DEFAULT_WINDOW_HEIGHT + 'px'
 
     return options
+  }
+
+  /**
+  * Returns increased indexZ to stack the windows properly
+  *
+  * @param {none}
+  * @throws {none} nothing crucial to throw
+  * @returns {Object options} options for new window
+  */
+  startMemory (rows, lines) {
+    let memoryGame = new Memory()
+    memoryGame.init(rows, lines)
   }
 }
