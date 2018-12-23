@@ -37,9 +37,11 @@ export default class Memory extends PWDWindow {
     holder.appendChild(gameFrame)
 
     this.expose()
+    this.init()
   }
 
   init (rows, cols) {
+    this.pause()
     console.log('init Memory game with ' + rows + ' rows and ' + cols + ' columns')
     // Defaults
     this.rows = rows || 2
@@ -49,15 +51,13 @@ export default class Memory extends PWDWindow {
     this.turnedCardsCounter = 0
     this.guessedCounter = 0
     this.attemptCounter = 0
-    
+
     this.infoBlock.innerHTML = ''
     this.timerBlock.innerHTML = ''
 
     this.numberOfCards = this.rows * this.cols
     this.carsdArray = new Deck(this.numberOfCards).getDeck()
-    if (this.numberOfCards === 16) this.countdown = 40
-    else if (this.numberOfCards === 8) this.countdown = 20
-    else this.countdown = 10
+    this.countdown = 60
 
     let board = document.createElement('div')
     board.classList.toggle('memory-board')
@@ -78,14 +78,12 @@ export default class Memory extends PWDWindow {
         newCard.classList.toggle('memory-card')
         newCard.classList.toggle('suit')
         newCard.setAttribute('id', this.carsdArray[cardIndex].id)
-        newCard.setAttribute('name', this.carsdArray[cardIndex].picId)
         newCard.addEventListener('click', (e) => { if (this.turnedCardsCounter < 2) this.turn(e.target) })
         newRow.appendChild(newCard)
         cardIndex++
       }
       board.appendChild(newRow)
     }
-    this.startTimer()
   }
 
   message (message, winnerFlag) {
@@ -118,6 +116,7 @@ export default class Memory extends PWDWindow {
   }
 
   turn (card) {
+    if (this.countdown === 60) this.startTimer()
     this.attemptCounter++
     this.infoBlock.innerHTML = 'Attempts : ' + this.attemptCounter
 
@@ -173,12 +172,13 @@ export default class Memory extends PWDWindow {
   startTimer () {
     let self = this
     this.intervalHandler = setInterval(function () {
-      if (self.countdown === 0) {
+      self.countdown--
+      if (self.countdown <= 0) {
         clearInterval(self.intervalHandler)
         self.message('YOU LOSE !!!', false)
+      } else {
+        self.timerBlock.innerHTML = self.countdown
       }
-      self.timerBlock.innerHTML = self.countdown
-      self.countdown--
     }, 1000)
   }
 

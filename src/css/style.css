@@ -187,14 +187,14 @@ ul.osx-dock li:hover span {
 }
 
 .memory-row { 
-    padding: 3px ;
+    padding: 2px ;
 }
 
 .memory-card { 
     width: 60px;
     height: 60px;
     display: inline-block;
-    margin: 3px 6px;
+    margin: 2px 4px;
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -202,6 +202,10 @@ ul.osx-dock li:hover span {
 
 .suit { 
     background-image : url("../image/0.jpg");
+}
+
+.selected{ 
+    border: 2px solid yellow;
 }
 
 .alert-msg {
@@ -240,5 +244,9 @@ ul.osx-dock li:hover span {
     text-align: center;
     text-shadow: 2px 2px darkblue;
     margin-top: 5px;
+}
+
+div:focus {
+    border: 1px solid Aqua;
 }
 

@@ -19,6 +19,8 @@ export default class PWDDesktop {
     this.DEFAULT_WINDOW_WIDTH = 400
 
     this.memoryGameCounter = 0
+
+    this.tabIndex = 0
   }
 
   /**
@@ -67,6 +69,7 @@ export default class PWDDesktop {
 
     options.zIndex = ++this.indexZ
     options.id = ++this.globalID
+    options.tabIndex = ++this.tabIndex
 
     this.globalLeft = (this.globalLeft > this.globalWidth - this.DEFAULT_WINDOW_WIDTH) ? 20 : this.globalLeft += 20
     options.left = this.globalLeft + 'px'
