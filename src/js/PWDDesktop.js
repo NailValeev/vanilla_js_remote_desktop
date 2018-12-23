@@ -5,6 +5,8 @@
  */
 
 import Memory from './Memory.js'
+import Chat from './Chat.js'
+import Game from './Game.js'
 
 export default class PWDDesktop {
   /**
@@ -17,8 +19,10 @@ export default class PWDDesktop {
     this.globalTop = 20
     this.DEFAULT_WINDOW_HEIGHT = 400
     this.DEFAULT_WINDOW_WIDTH = 400
-
+    // Separate counters for any type of application
     this.memoryGameCounter = 0
+    this.chatCounter = 0
+    this.gameCounter = 0
 
     this.tabIndex = 0
   }
@@ -106,15 +110,41 @@ export default class PWDDesktop {
   }
 
   /**
-  * Returns increased indexZ to stack the windows properly
+  * Starts the Memory game
   *
   * @param {none}
   * @throws {none} nothing crucial to throw
-  * @returns {Object options} options for new window
+  * @returns {undefined } void
   */
   startMemory (rows, lines) {
     this.memoryGameCounter++
     let memoryGame = new Memory(this.memoryGameCounter)
     memoryGame.begin()
+  }
+
+  /**
+  * Starts the chat application
+  *
+  * @param {none}
+  * @throws {none} nothing crucial to throw
+  * @returns {undefined } void
+  */
+  startChat () {
+    this.chatCounter++
+    let chatApp = new Chat(this.chatCounter)
+    chatApp.begin()
+  }
+
+  /**
+  * Starts the additional Game application
+  *
+  * @param {none}
+  * @throws {none} nothing crucial to throw
+  * @returns {undefined } void
+  */
+  startGame () {
+    this.gameCounter++
+    let gameApp = new Game(this.gameCounter)
+    gameApp.begin()
   }
 }

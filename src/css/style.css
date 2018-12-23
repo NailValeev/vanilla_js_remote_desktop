@@ -155,7 +155,15 @@ ul.osx-dock li:hover span {
 }
 
 .memory-body {
-   background-color: olivedrab; 
+   background-color: limegreen; 
+}
+
+.chat-body {
+   background-color: goldenrod; 
+}
+
+.game-body {
+   background-color: tomato; 
 }
 
 .app-menu {

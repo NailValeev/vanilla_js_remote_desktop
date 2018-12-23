@@ -92,8 +92,8 @@ class PWDWindow {
   /**
   * Handling of key Inputs
   *
-  * @param {Event} e event fired on key up
-  * @throws {none} nothing to throw, if any UI error, will be catched by 'onerror' event listener
+  * @param {number} keyCode key code from event fired on key up
+  * @throws {none} nothing crucial to throw
   * @returns {undefined} void
   */
   handleKeyInput (keyCode) {
