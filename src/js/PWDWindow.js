@@ -14,6 +14,9 @@ class PWDWindow {
   * @returns {NodeModule templ} window - holder for any application
   */
   constructor (name, gameId) {
+    // Drag / move handling
+    this.dragOptions = {}
+
     let self = this
     this.desktop = document.querySelector('.desktop')
     this.options = window.dt.getNewWindowOptions()
@@ -25,8 +28,26 @@ class PWDWindow {
     win.querySelector('span').innerHTML = name + ' ' + gameId
     win.querySelector('.window-icon').src = 'image/' + name.toLowerCase() + '.png'
     win.querySelector('.close-button').addEventListener('click', function (e) { self.close('#' + self.domId, e) })
-    win.addEventListener('click', function (e) { self.toTheTop('#' + self.domId) })
-    win.addEventListener('dragstart', function (e) { e.dataTransfer.setData('text/plain', e.target.id) })
+    win.addEventListener('mousedown', function (e) { self.toTheTop('#' + self.domId) })
+    win.addEventListener('dragstart', function (e) {
+      self.dragOptions = { startX: e.clientX, startY: e.clientY }
+      e.dataTransfer.setData('text/plain', e.target.id)
+      console.log(e)
+      console.log('Start : ' + self.dragOptions.startX + ', ' + self.dragOptions.startY)
+    })
+    win.addEventListener('dragend', function (e) {
+      console.log(e)
+      e.preventDefault()
+      self.dragOptions.endX = e.clientX
+      self.dragOptions.endY = e.clientY
+      console.log('End : ' + self.dragOptions.endX + ', ' + self.dragOptions.endY)
+      let deltaX = self.dragOptions.endX - self.dragOptions.startX
+      let deltaY = self.dragOptions.endY - self.dragOptions.startY
+      console.log('deltaX: ' + deltaX + ', deltaY: ' + deltaY)
+
+      e.target.style.left = (e.target.offsetLeft + deltaX) + 'px'
+      e.target.style.top = (e.target.offsetTop + deltaY) + 'px'
+    })
 
     win.style.zIndex = this.options.zIndex
     win.style.left = this.options.left
