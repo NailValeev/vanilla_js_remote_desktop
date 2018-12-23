@@ -72,10 +72,12 @@ class PWDWindow {
     }
     console.log('moving window ' + elementId + 'to the top')
     win.style.zIndex = window.dt.getNextZ()
+    win.focus()
   }
 
   expose () {
     this.desktop.appendChild(this.templ)
+    document.querySelector('#' + this.domId).focus()
   }
 }
 
