@@ -29,7 +29,7 @@ class PWDWindow {
     win.querySelector('span').innerHTML = name + ' ' + gameId
     win.querySelector('.window-icon').src = 'image/' + name.toLowerCase() + '.png'
     win.querySelector('.close-button').addEventListener('click', function (e) { self.close('#' + self.domId, e) })
-    win.addEventListener('mouseup', function (e) {
+    win.addEventListener('click', function (e) {
       e.preventDefault()
       self.toTheTop('#' + self.domId)
     }) // instead of click, don't wait for mouseup
@@ -56,7 +56,9 @@ class PWDWindow {
       self.toTheTop('#' + e.target.id)
     })
 
-    win.addEventListener('keyup', (e) => { this.handleKeyInput(e.keyCode) })
+    if (name === 'Memory') {
+      win.addEventListener('keyup', (e) => { this.handleKeyInput(e.keyCode) })
+    }
 
     win.style.zIndex = this.options.zIndex
     win.style.left = this.options.left

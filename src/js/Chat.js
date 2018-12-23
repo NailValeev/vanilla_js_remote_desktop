@@ -15,27 +15,47 @@ export default class Chat extends PWDWindow {
 
   begin () {
     console.log('new Chat application')
+    // TODO check if user has nickname saved
+    this.nickname = ''
+    if (window.localStorage.getItem('nickname')) {
+      this.nickname = window.localStorage.getItem('nickname')
+    }
+
     let self = this
-
     let holder = this.templ.querySelector('.window-content')
+    let chatFrame = document.querySelector('#template-chat').content.cloneNode(true)
+    this.btn = chatFrame.querySelector('#text-btn')
+    this.input = chatFrame.querySelector('#text-input')
+    this.input.addEventListener('click', (e) => {
+      e.stopPropagation()
+      console.log('input')
+    })
 
-    let gameFrame = document.querySelector('#template-chat').content.cloneNode(true)
+    if (this.nickname) {
+      this.btn.innerHTML = 'Start chat as ' + this.nickname
+      this.btn.addEventListener('click', function (e) { self.init(true) })
+      this.input.style.display = 'none'
+    } else {
+      // TODO handle nickname input
+      this.input.placeholder = 'Nickname'
+      this.btn.innerHTML = 'Submit'
+      this.btn.addEventListener('click', function (e) {
+        e.stopPropagation()
+        self.saveNickname(true)
+      })
+    }
 
-    gameFrame.querySelector('#run44').addEventListener('click', function (e) { self.init(4, 4) })
-    gameFrame.querySelector('#run22').addEventListener('click', function (e) { self.init(2, 2) })
-    gameFrame.querySelector('#run24').addEventListener('click', function (e) { self.init(2, 4) })
+    this.chatBody = chatFrame.querySelector('.app-body')
+    this.chatBody.classList.toggle('chat-body')
+    this.chatBoard = chatFrame.querySelector('.app-board')
+    this.infoBlock = chatFrame.querySelector('.app-info')
 
-    this.gameBody = gameFrame.querySelector('.app-body')
-    this.gameBody.classList.toggle('chat-body')
-    this.gameBoard = gameFrame.querySelector('.app-board')
-    this.infoBlock = gameFrame.querySelector('.app-info')
-
-    holder.appendChild(gameFrame)
+    holder.appendChild(chatFrame)
 
     this.expose()
   }
 
   init () {
-    // TODO check if user has name filled
+
   }
 }
