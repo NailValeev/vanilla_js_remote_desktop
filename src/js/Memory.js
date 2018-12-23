@@ -49,12 +49,15 @@ export default class Memory extends PWDWindow {
     this.turnedCardsCounter = 0
     this.guessedCounter = 0
     this.attemptCounter = 0
-    this.countdown = 30
+    
     this.infoBlock.innerHTML = ''
     this.timerBlock.innerHTML = ''
 
     this.numberOfCards = this.rows * this.cols
     this.carsdArray = new Deck(this.numberOfCards).getDeck()
+    if (this.numberOfCards === 16) this.countdown = 40
+    else if (this.numberOfCards === 8) this.countdown = 20
+    else this.countdown = 10
 
     let board = document.createElement('div')
     board.classList.toggle('memory-board')

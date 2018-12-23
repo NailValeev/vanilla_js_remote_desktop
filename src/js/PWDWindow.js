@@ -26,6 +26,7 @@ class PWDWindow {
     win.querySelector('.window-icon').src = 'image/' + name.toLowerCase() + '.png'
     win.querySelector('.close-button').addEventListener('click', function (e) { self.close('#' + self.domId, e) })
     win.addEventListener('click', function (e) { self.toTheTop('#' + self.domId) })
+    win.addEventListener('dragstart', function (e) { e.dataTransfer.setData('text/plain', e.target.id) })
 
     win.style.zIndex = this.options.zIndex
     win.style.left = this.options.left

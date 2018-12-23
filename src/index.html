@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="css/style.css">
 
         <template id="template-pwd-window">
-            <div class="window">
+            <div class="window" draggable="true">
                 <div class="window-header">
                     <img class="window-icon" />
                     <span class="window-text">
@@ -59,6 +59,10 @@
                     <li>
                         <span>Clean</span>
                         <a id="clean-btn"><img src="image/clean.png" /></a>
+                    </li>                 
+                    <li dropzone="true">
+                        <span>Trash</span>
+                        <a id="trash-btn"><img src="image/trash.png" /></a>
                     </li>                 
                 </ul>
             </div>

@@ -25,3 +25,24 @@ document.querySelector('#clean-btn').addEventListener('click', (e) => { dt.refre
 document.querySelector('#chat-btn').addEventListener('dblclick', function () { return false })
 document.querySelector('#memory-btn').addEventListener('dblclick', function () { return false })
 document.querySelector('#game-btn').addEventListener('dblclick', function () { return false })
+
+document.querySelector('#trash-btn').addEventListener('dragover', (e) => {
+  e.preventDefault()
+  // Set the dropEffect to move
+  e.dataTransfer.dropEffect = 'copy'
+})
+document.querySelector('#trash-btn').addEventListener('dragenter', (e) => {
+  e.preventDefault()
+})
+document.querySelector('#trash-btn').addEventListener('dragleave', (e) => {
+  e.preventDefault()
+})
+document.querySelector('#trash-btn').addEventListener('drop', (e) => {
+  console.log(e)
+  // Get the id of the target and add the moved element to the target's DOM
+  let id = e.dataTransfer.getData('text/plain')
+  console.log('id ' + id)
+  let win = document.getElementById(id)
+  console.log('typeOf ' + typeof win)
+  document.querySelector('.desktop').removeChild(win)
+})
