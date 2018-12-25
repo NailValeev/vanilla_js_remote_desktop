@@ -1,4 +1,3 @@
-// eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd
 /**
  * The memory game application.
  *
@@ -11,12 +10,16 @@ import { PWDWindow } from './PWDWindow.js'
 export default class Chat extends PWDWindow {
   constructor (chatId) {
     super('Chat', chatId)
+    this.server = 'ws://vhost3.lnu.se:20080/socket/'
+    this.apiKey = 'eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd'
+    this.nickname = ''
+    this.connection = null
+    this.connected = false
   }
 
   begin () {
     console.log('new Chat application')
     // TODO check if user has nickname saved
-    this.nickname = ''
     if (window.localStorage.getItem('nickname')) {
       this.nickname = window.localStorage.getItem('nickname')
     }
@@ -28,12 +31,16 @@ export default class Chat extends PWDWindow {
     this.input = chatFrame.querySelector('#text-input')
     this.input.addEventListener('click', (e) => {
       e.stopPropagation()
-      console.log('input')
+      this.infoBlock.innerHTML = 'Input your nickname for the chat'
+    })
+    this.input.addEventListener('keyup', (e) => {
+      this.infoBlock.innerHTML = this.input.value
+      this.nickname = this.input.value
     })
 
     if (this.nickname) {
       this.btn.innerHTML = 'Start chat as ' + this.nickname
-      this.btn.addEventListener('click', function (e) { self.init(true) })
+      this.btn.addEventListener('click', function (e) { self.init() })
       this.input.style.display = 'none'
     } else {
       // TODO handle nickname input
@@ -56,6 +63,44 @@ export default class Chat extends PWDWindow {
   }
 
   init () {
+    console.log('Chat application in action :)')
+    this.infoBlock.innerHTML = 'Connecting to server...'
+    let infoBox = document.createElement('div')
+    infoBox.classList.toggle('checking-holder')
+    this.chatBoard.appendChild(infoBox)
 
+    this.connection = this.connect()
+  }
+
+  saveNickname () {
+    let nick = this.nickname.trim()
+    if (nick.length > 0) {
+      window.localStorage.setItem('nickname', nick)
+      this.init()
+    } else {
+      this.infoBlock.innerHTML = 'Please fill the form field'
+    }
+  }
+
+  connect () {
+    let conn = new WebSocket(this.server)
+
+    conn.onerror = function (event) {
+      console.log('conection error' + event)
+    }
+
+    conn.onclose = function (event) {
+      console.log('conection closed' + event)
+      // TODO fire custom event ?
+    }
+
+    conn.onopen = function (event) {
+      console.log('conection opened' + event)
+      return conn
+    }
+
+    conn.onmessage = function (event) {
+      console.log('New message' + event)
+    }
   }
 }

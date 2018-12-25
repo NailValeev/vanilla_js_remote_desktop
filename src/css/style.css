@@ -230,6 +230,15 @@ ul.osx-dock li:hover span {
     margin: auto;
 }
 
+.checking-holder {
+    display: block;
+    margin: auto;
+    height: 200px;
+    width: 200px;
+    background-color: goldenrod;
+    background-image: url("../image/checking.gif")
+}
+
 .alert-winner-holder {
     background-image: url("../image/win.jpg")
 }
@@ -240,17 +249,17 @@ ul.osx-dock li:hover span {
 
 .app-info {
     color: lightgreen;
-    font-size: 8pt;
+    font-size: 10pt;
     text-align: center;
-    text-shadow: 2px 2px darkgreen;
+    text-shadow: 1px 1px darkgreen;
     margin-top: 5px;
 }
 
 .app-timer {
     color: lightblue;
-    font-size: 8pt;
+    font-size: 10pt;
     text-align: center;
-    text-shadow: 2px 2px darkblue;
+    text-shadow: 1px 1px darkblue;
     margin-top: 5px;
 }
 
