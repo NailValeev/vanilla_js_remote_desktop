@@ -78,7 +78,7 @@ export default class Memory extends PWDWindow {
         newCard.classList.toggle('memory-card')
         newCard.classList.toggle('suit')
         newCard.setAttribute('id', this.carsdArray[cardIndex].id)
-        newCard.addEventListener('click', (e) => { if (this.turnedCardsCounter < 2) this.turn(e.target) })
+        newCard.addEventListener('click', (e) => { if (this.turnedCardsCounter < 2) this.turn(e.target); e.stopPropagation() })
         newRow.appendChild(newCard)
         cardIndex++
       }
@@ -121,7 +121,10 @@ export default class Memory extends PWDWindow {
     this.infoBlock.innerHTML = 'Attempts : ' + this.attemptCounter
 
     this.turnedCardsCounter++
-    if (!card.classList.contains('suit')) return // already turned
+    if (!card.classList.contains('suit')) {
+      console.log('this card is already turned!')
+      return // already turned
+    }
 
     card.classList.toggle('suit')
     let cardID = card.id.substring(1)

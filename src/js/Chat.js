@@ -19,6 +19,10 @@ export default class Chat extends PWDWindow {
 
   begin () {
     console.log('new Chat application')
+
+    // Show not connected status - will be connected on init only
+    this.showDisconnected()
+
     // TODO check if user has nickname saved
     if (window.localStorage.getItem('nickname')) {
       this.nickname = window.localStorage.getItem('nickname')
@@ -29,21 +33,21 @@ export default class Chat extends PWDWindow {
     let chatFrame = document.querySelector('#template-chat').content.cloneNode(true)
     this.btn = chatFrame.querySelector('#text-btn')
     this.input = chatFrame.querySelector('#text-input')
-    this.input.addEventListener('click', (e) => {
-      e.stopPropagation()
-      this.infoBlock.innerHTML = 'Input your nickname for the chat'
-    })
-    this.input.addEventListener('keyup', (e) => {
-      this.infoBlock.innerHTML = this.input.value
-      this.nickname = this.input.value
-    })
-
+    
     if (this.nickname) {
       this.btn.innerHTML = 'Start chat as ' + this.nickname
       this.btn.addEventListener('click', function (e) { self.init() })
       this.input.style.display = 'none'
     } else {
       // TODO handle nickname input
+      this.input.addEventListener('click', (e) => {
+        e.stopPropagation()
+        this.infoBlock.innerHTML = 'Input your nickname for the chat'
+      })
+      this.input.addEventListener('keyup', (e) => {
+        this.infoBlock.innerHTML = this.input.value
+        this.nickname = this.input.value
+      })
       this.input.placeholder = 'Nickname'
       this.btn.innerHTML = 'Submit'
       this.btn.addEventListener('click', function (e) {
@@ -51,7 +55,7 @@ export default class Chat extends PWDWindow {
         self.saveNickname(true)
       })
     }
-
+    
     this.chatBody = chatFrame.querySelector('.app-body')
     this.chatBody.classList.toggle('chat-body')
     this.chatBoard = chatFrame.querySelector('.app-board')
@@ -63,13 +67,31 @@ export default class Chat extends PWDWindow {
   }
 
   init () {
+    let self = this
     console.log('Chat application in action :)')
     this.infoBlock.innerHTML = 'Connecting to server...'
     let infoBox = document.createElement('div')
     infoBox.classList.toggle('checking-holder')
-    this.chatBoard.appendChild(infoBox)
+    if ( !this.chatBoard.classList.contains('.checking-holder')){
+      this.chatBoard.appendChild(infoBox)
+    }
+    this.connection = new WebSocket(this.server)
+    this.connection.onerror = (event) => { console.log(this.domId + ' conection error' + event) }
+    this.connection.onclose = (event) => { console.log(this.domId + ' conection closed' + event) }
 
-    this.connection = this.connect()
+    this.connection.onopen = function (event) {
+      console.log('conection opened' + event)
+      self.showConnected()
+    }
+
+    this.connection.onmessage = function (event) {
+      let msg = JSON.parse(event.data)
+      if (event.data.heartbrake !== null) {
+        console.log('Heartbreak from the ' + msg.username)
+      } else {
+        console.log('Message from the ' + msg.username)
+      }
+    }
   }
 
   saveNickname () {
@@ -82,25 +104,16 @@ export default class Chat extends PWDWindow {
     }
   }
 
-  connect () {
-    let conn = new WebSocket(this.server)
+  showDisconnected () {
+    let icon = document.createElement('img')
+    icon.classList.toggle('window-icon')
+    icon.classList.toggle('conn-icon')
+    icon.src = 'image/disconnect.png'
+    this.windowHeader.appendChild(icon)
+  } 
 
-    conn.onerror = function (event) {
-      console.log('conection error' + event)
-    }
+  showConnected () {
+    this.windowHeader.querySelector('.conn-icon').src = 'image/connected.png'
+  } 
 
-    conn.onclose = function (event) {
-      console.log('conection closed' + event)
-      // TODO fire custom event ?
-    }
-
-    conn.onopen = function (event) {
-      console.log('conection opened' + event)
-      return conn
-    }
-
-    conn.onmessage = function (event) {
-      console.log('New message' + event)
-    }
-  }
 }

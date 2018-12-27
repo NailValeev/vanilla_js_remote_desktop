@@ -20,10 +20,12 @@ class PWDWindow {
     let self = this
     this.desktop = document.querySelector('.desktop')
     this.options = window.dt.getNewWindowOptions()
+    this.name = name
 
     this.domId = 'window' + this.options.id
     this.templ = document.querySelector('#template-pwd-window').content.cloneNode(true)
     let win = this.templ.querySelector('.window')
+    this.windowHeader = this.templ.querySelector('.window-header')
     win.setAttribute('id', this.domId)
     win.setAttribute('tabindex', this.options.tabIndex)
     win.querySelector('span').innerHTML = name + ' ' + gameId
@@ -70,6 +72,15 @@ class PWDWindow {
 
   close (elementId, e) {
     console.log('closing window ' + elementId)
+    if (this.name === 'Chat') {
+      console.log ('Closing connection for ' + elementId )
+      this.connection.close()
+    } else if (this.name === 'Memory') {
+      console.log ('Closing connection for ' + elementId )
+      clearInterval(this.intervalHandler)
+      this.pause()
+    }
+
     this.desktop.removeChild(document.querySelector(elementId))
     e.stopPropagation()
   }
