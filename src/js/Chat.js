@@ -14,29 +14,38 @@ export default class Chat extends PWDWindow {
     this.apiKey = 'eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd'
     this.nickname = ''
     this.connection = null
+    this.connecting = false
     this.connected = false
   }
 
   begin () {
-    console.log('new Chat application')
-
+    console.log('Chat app begin()')
     // Show not connected status - will be connected on init only
     this.showDisconnected()
-
     // TODO check if user has nickname saved
     if (window.localStorage.getItem('nickname')) {
       this.nickname = window.localStorage.getItem('nickname')
     }
-
-    let self = this
     let holder = this.templ.querySelector('.window-content')
     let chatFrame = document.querySelector('#template-chat').content.cloneNode(true)
     this.btn = chatFrame.querySelector('#text-btn')
     this.input = chatFrame.querySelector('#text-input')
     
+    this.chatBody = chatFrame.querySelector('.app-body')
+    this.chatBody.classList.toggle('chat-body')
+    this.chatBoard = chatFrame.querySelector('.app-board')
+    this.infoBlock = chatFrame.querySelector('.app-info')
+
+    holder.appendChild(chatFrame)
+
+    this.checkNickname()
+    this.expose()
+  }
+
+  checkNickname () {     
     if (this.nickname) {
       this.btn.innerHTML = 'Start chat as ' + this.nickname
-      this.btn.addEventListener('click', function (e) { self.init() })
+      this.btn.addEventListener('click', (e) => { this.init(); e.stopPropagation() })
       this.input.style.display = 'none'
     } else {
       // TODO handle nickname input
@@ -50,25 +59,19 @@ export default class Chat extends PWDWindow {
       })
       this.input.placeholder = 'Nickname'
       this.btn.innerHTML = 'Submit'
-      this.btn.addEventListener('click', function (e) {
+      this.btn.addEventListener('click', (e) => {
         e.stopPropagation()
-        self.saveNickname(true)
+        this.saveNickname()
       })
     }
-    
-    this.chatBody = chatFrame.querySelector('.app-body')
-    this.chatBody.classList.toggle('chat-body')
-    this.chatBoard = chatFrame.querySelector('.app-board')
-    this.infoBlock = chatFrame.querySelector('.app-info')
-
-    holder.appendChild(chatFrame)
-
-    this.expose()
   }
 
   init () {
-    let self = this
-    console.log('Chat application in action :)')
+    if (this.connecting) return // Already trying to connect, prevent multiple clicks
+    
+    this.connecting = true
+
+    console.log('Chat app init()')
     this.infoBlock.innerHTML = 'Connecting to server...'
     let infoBox = document.createElement('div')
     infoBox.classList.toggle('checking-holder')
@@ -77,19 +80,33 @@ export default class Chat extends PWDWindow {
     }
     this.connection = new WebSocket(this.server)
     this.connection.onerror = (event) => { console.log(this.domId + ' conection error' + event) }
-    this.connection.onclose = (event) => { console.log(this.domId + ' conection closed' + event) }
-
-    this.connection.onopen = function (event) {
-      console.log('conection opened' + event)
-      self.showConnected()
+    this.connection.onclose = (event) => { 
+      console.log(this.domId + ' conection closed' + event)
+      this.showDisconnected() 
     }
 
-    this.connection.onmessage = function (event) {
+    this.connection.onopen = (event) => {
+      console.log('conection opened' + event)
+      this.showConnected()
+    }
+
+    this.connection.onmessage = (event) => {
       let msg = JSON.parse(event.data)
-      if (event.data.heartbrake !== null) {
-        console.log('Heartbreak from the ' + msg.username)
+      if (msg.type === 'heartbeat') {
+        // console.log('Heartbeat from the ' + msg.username) // Ignore me
+      } else if (msg.type === 'notification' && msg.data === 'You are connected!') {
+        console.log('App have got handshake from the chat server!')
+        setTimeout( 
+          () => {
+            this.infoBlock.innerHTML = this.nickname + ', you are connected'
+            this.chatBoard.removeChild(this.chatBoard.firstChild) // Connecting image
+            let messenger = document.createElement('div')
+            messenger.classList.toggle('messenger')
+            // TODO check localstorage for saved messages in order to expose
+          }, 1000 )
       } else {
         console.log('Message from the ' + msg.username)
+        console.log('msg' + event.data)
       }
     }
   }
@@ -98,7 +115,8 @@ export default class Chat extends PWDWindow {
     let nick = this.nickname.trim()
     if (nick.length > 0) {
       window.localStorage.setItem('nickname', nick)
-      this.init()
+      this.infoBlock.innerHTML = ''
+      this.checkNickname()
     } else {
       this.infoBlock.innerHTML = 'Please fill the form field'
     }
