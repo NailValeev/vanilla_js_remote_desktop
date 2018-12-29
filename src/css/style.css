@@ -267,3 +267,47 @@ div:focus {
     border: 1px solid Aqua;
 }
 
+.messenger {
+    background-color: lightpink;
+    height: 300px;
+    width: 96%;
+    display: block;
+    margin: auto;
+    overflow: auto;
+}
+
+.msg {
+    width: 96%;
+    display: block;
+    margin-left: 1%;
+    border: 1px solid #555;
+    background-color: white;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 10px;
+    padding: 4px;
+    margin-top: 5px;
+}
+
+.my-msg {
+    background-color: lightgreen;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 0;
+}
+
+.msg-header {
+    font-style: bold;
+    text-align: center;
+    border-bottom: 1px solid grey; 
+}
+
+.msg-body {
+    border-bottom: 1px solid grey; 
+    text-align: left;
+}
+
+.msg-footer {
+    font-size: 70%;
+    text-align: right;
+}

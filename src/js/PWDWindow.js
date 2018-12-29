@@ -80,14 +80,12 @@ class PWDWindow {
       clearInterval(this.intervalHandler)
       this.pause()
     }
-
     this.desktop.removeChild(document.querySelector(elementId))
     e.stopPropagation()
   }
 
   toTheTop (elementId) {
     let win = document.querySelector(elementId)
-
     win.focus()
     if (Number(win.style.zIndex) === window.dt.getCurrentZ()) {
       console.log('window ' + elementId + ' already at the top')

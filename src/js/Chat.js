@@ -13,6 +13,9 @@ export default class Chat extends PWDWindow {
     this.server = 'ws://vhost3.lnu.se:20080/socket/'
     this.apiKey = 'eDBE76deU7L0H9mEBgxUKVR0VCnq0XBd'
     this.nickname = ''
+    this.outputMessage = ''
+    this.channel = 'open-channel-1dv022-3'
+
     this.connection = null
     this.connecting = false
     this.connected = false
@@ -51,7 +54,6 @@ export default class Chat extends PWDWindow {
       // TODO handle nickname input
       this.input.addEventListener('click', (e) => {
         e.stopPropagation()
-        this.infoBlock.innerHTML = 'Input your nickname for the chat'
       })
       this.input.addEventListener('keyup', (e) => {
         this.infoBlock.innerHTML = this.input.value
@@ -102,11 +104,42 @@ export default class Chat extends PWDWindow {
             this.chatBoard.removeChild(this.chatBoard.firstChild) // Connecting image
             let messenger = document.createElement('div')
             messenger.classList.toggle('messenger')
+            this.chatBoard.appendChild(messenger) // Connecting image
             // TODO check localstorage for saved messages in order to expose
+            this.messenger = this.chatBoard.querySelector('.messenger')
+            this.messenger.addEventListener('click', (e) => {
+              e.stopPropagation();
+              document.querySelector('#' + this.domId).querySelector('.messenger').focus()
+            })
+
+            this.input.style.display = 'inline'
+            this.input.value = ''
+
+            this.input.addEventListener('click', (e) => {
+              e.stopPropagation()
+            })
+
+            this.input.removeEventListener('keyup', (e) => {
+              this.infoBlock.innerHTML = this.input.value
+              this.nickname = this.input.value
+            })
+
+            this.input.addEventListener('keyup', (e) => {
+              this.outputMessage = this.input.value
+            })
+
+            this.input.placeholder = 'Your message'
+            this.btn.innerHTML = 'Send'
+            this.btn.addEventListener('click', (e) => {
+              e.stopPropagation()
+              this.sendMessage()
+            })
           }, 1000 )
-      } else {
+      } else  if (msg.type === 'message'){
         console.log('Message from the ' + msg.username)
         console.log('msg' + event.data)
+        this.displayMessage( msg )
+
       }
     }
   }
@@ -133,5 +166,30 @@ export default class Chat extends PWDWindow {
   showConnected () {
     this.windowHeader.querySelector('.conn-icon').src = 'image/connected.png'
   } 
+
+  sendMessage () {
+    let msg = {
+      type: 'message',
+      data: this.outputMessage,
+      username: this.nickname,
+      channel: this.channel,
+      key: this.apiKey
+    }
+
+    this.connection.send(JSON.stringify(msg))
+    this.input.value = ''
+  }
+
+  displayMessage (msg) {
+    let text = msg.data
+    let user = msg.username
+    let msgHolder = document.querySelector('#template-msg').content.cloneNode(true)
+    msgHolder.querySelector('.msg-header').innerHTML = user
+    msgHolder.querySelector('.msg-body').innerHTML = text
+    msgHolder.querySelector('.msg-footer').innerHTML = new Date()
+    if (this.outputMessage === text) msgHolder.querySelector('.msg').classList.toggle('my-msg')
+    this.messenger.appendChild(msgHolder)
+    this.messenger.scrollTop = this.messenger.scrollHeight
+  }
 
 }
