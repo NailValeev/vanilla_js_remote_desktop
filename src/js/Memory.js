@@ -116,15 +116,17 @@ export default class Memory extends PWDWindow {
   }
 
   turn (card) {
-    if (this.countdown === 60) this.startTimer()
-    this.attemptCounter++
-    this.infoBlock.innerHTML = 'Attempts : ' + this.attemptCounter
-
-    this.turnedCardsCounter++
     if (!card.classList.contains('suit')) {
       console.log('this card is already turned!')
       return // already turned
     }
+    
+    if (this.countdown === 60) this.startTimer()
+    
+    this.attemptCounter++
+    this.infoBlock.innerHTML = 'Attempts : ' + this.attemptCounter
+
+    this.turnedCardsCounter++
 
     card.classList.toggle('suit')
     let cardID = card.id.substring(1)
