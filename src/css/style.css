@@ -269,7 +269,7 @@ div:focus {
 
 .messenger {
     background-color: lightpink;
-    height: 300px;
+    height: 270px;
     width: 96%;
     display: block;
     margin: auto;
@@ -310,4 +310,34 @@ div:focus {
 .msg-footer {
     font-size: 70%;
     text-align: right;
+}
+
+#reset-btn {
+    display: none;
+    float: right;
+}
+
+#start-btn {
+    display: none;
+    float: center;
+}
+
+#send-btn {
+    float: right;
+}
+
+.msg-input-block {
+    height: 60px;
+    display: none;
+    width: 96%;
+    margin: auto;
+    margin-top: 5px;
+}
+
+.msg-input-block {
+    float: left;
+}
+
+.name-input-block {
+    display: none;
 }

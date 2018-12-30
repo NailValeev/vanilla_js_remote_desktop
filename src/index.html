@@ -43,12 +43,19 @@
             <div class="app-body">
                 <div class="app-menu">
                     <div class="app-buttons">
-                        <input type="textarea" id="text-input" rows="2"/>
-                        <a class="app-button" id="text-btn"></a>
+                        <div class ="name-input-block">
+                            <input type="text" id="name-input"/>
+                            <a class="app-button" id="save-btn">Submit</a>
+                        </div>
+                        <a class="app-button" id="reset-btn">Change name</a>
+                        <a class="app-button" id="start-btn"></a>
                     </div>
                 </div>
                 <div class="app-board"></div>
-                <div class="app-info"></div>
+                <div class="msg-input-block">
+                    <textarea rows="3" cols="40" id="msg-input"></textarea>
+                    <a class="app-button" id="send-btn">Send message</a>
+                </div>
             </div>
         </template> 
 
