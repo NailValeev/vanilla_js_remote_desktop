@@ -19,6 +19,7 @@ export default class Chat extends PWDWindow {
     this.connection = null
     this.connecting = false
     this.connected = false
+    this.messages = []
   }
 
   begin () {
@@ -134,13 +135,16 @@ export default class Chat extends PWDWindow {
               e.stopPropagation()
               this.sendMessage()
             })
+            
+            this.messages = this.getMessages()
+            this.messages.forEach( (msg) => this.displayMessage(msg))
           }, 1000 )
-      } else  if (msg.type === 'message'){
-        console.log('Message from the ' + msg.username)
-        console.log('msg' + event.data)
-        this.displayMessage( msg )
-
-      }
+        } else  if (msg.type === 'message'){
+          console.log('Message from the ' + msg.username)
+          console.log('msg' + event.data)
+          this.saveMessage (msg)
+          this.displayMessage( msg )
+        }
     }
   }
 
@@ -187,9 +191,37 @@ export default class Chat extends PWDWindow {
     msgHolder.querySelector('.msg-header').innerHTML = user
     msgHolder.querySelector('.msg-body').innerHTML = text
     msgHolder.querySelector('.msg-footer').innerHTML = new Date()
-    if (this.outputMessage === text) msgHolder.querySelector('.msg').classList.toggle('my-msg')
+    if (this.nickname === user) msgHolder.querySelector('.msg').classList.toggle('my-msg')
     this.messenger.appendChild(msgHolder)
     this.messenger.scrollTop = this.messenger.scrollHeight
+  }
+
+  /**
+  * Stringifying of array in order to save to the local storage, saving it
+  *
+  * @param {Object} data array with data to be stringified and saved
+  * @throws {none} nothing special to throw
+  * @returns {undefined} void, local storage will be changed (or not)
+  */
+  saveMessage (msgObject) {
+    if (this.messages.length >= 25) {
+      this.messages.shift()
+    }
+    this.messages.push(msgObject)
+    window.localStorage.setItem('messages', JSON.stringify(this.messages))
+  }
+
+  /**
+  * Reading of string from localstorage and parsing it to an array
+  *
+  * @param {none} _ 
+  * @throws {none} nothing crucial to throw
+  * @returns {Object[]} scores array with messages
+  */
+  getMessages () {
+    let result = JSON.parse(window.localStorage.getItem('messages'))
+    if (result === null) result = [] // Avoid NullPointer on empty array
+    return result
   }
 
 }
