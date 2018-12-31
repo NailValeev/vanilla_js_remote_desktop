@@ -30,10 +30,12 @@ class PWDWindow {
     win.setAttribute('tabindex', this.options.tabIndex)
     win.querySelector('span').innerHTML = name + ' ' + gameId
     win.querySelector('.window-icon').src = 'image/' + name.toLowerCase() + '.png'
-    win.querySelector('.close-button').addEventListener('click', function (e) { self.close('#' + self.domId, e) })
-    win.addEventListener('click', function (e) {
+    win.querySelector('.close-button').addEventListener('click', (e) => {
+      this.close('#' + this.domId, e) 
+    })
+    win.addEventListener('click', (e) => {
       e.preventDefault()
-      self.toTheTop('#' + self.domId)
+      this.toTheTop('#' + this.domId)
     }) // instead of click, don't wait for mouseup
 
     win.addEventListener('dragstart', function (e) {

@@ -345,7 +345,7 @@ div:focus {
     display: none;
 }
 
-#game-canvas {
+.game-canvas {
     width: 380px; 
     height:300px;
     background-color: black;
