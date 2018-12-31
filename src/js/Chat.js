@@ -96,6 +96,7 @@ export default class Chat extends PWDWindow {
         let nameHolder = document.createElement('span')
         nameHolder.classList.toggle('name-holder')
         nameHolder.innerHTML = 'Hi, ' + this.nickname
+        nameHolder.style.cssFloat = 'left'
         this.btnBlock.insertBefore(nameHolder, this.resetBtn)
       } else {
         this.btnBlock.querySelector('.name-holder').innerHTML = 'Hi, ' + this.nickname

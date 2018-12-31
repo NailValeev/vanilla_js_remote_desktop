@@ -76,7 +76,7 @@ class PWDWindow {
       console.log ('Closing connection for ' + elementId )
       if (this.connection !== null) this.connection.close()
     } else if (this.name === 'Memory') {
-      console.log ('Closing connection for ' + elementId )
+      console.log ('Clearing interval for ' + elementId )
       clearInterval(this.intervalHandler)
       this.pause()
     }
@@ -87,7 +87,7 @@ class PWDWindow {
   toTheTop (elementId) {
     let win = document.querySelector(elementId)
     if (win === null) return
-     
+
     win.focus()
     if (Number(win.style.zIndex) === window.dt.getCurrentZ()) {
       console.log('window ' + elementId + ' already at the top')

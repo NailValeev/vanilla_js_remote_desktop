@@ -14,19 +14,18 @@ export default class Game extends PWDWindow {
 
   begin () {
     console.log('new Chat application')
-    let self = this
-
     let holder = this.templ.querySelector('.window-content')
-
     let gameFrame = document.querySelector('#template-game').content.cloneNode(true)
 
-    gameFrame.querySelector('#run44').addEventListener('click', function (e) { self.init(4, 4) })
-    gameFrame.querySelector('#run22').addEventListener('click', function (e) { self.init(2, 2) })
-    gameFrame.querySelector('#run24').addEventListener('click', function (e) { self.init(2, 4) })
+    gameFrame.querySelector('#game-start-btn').addEventListener('click', (e) => {
+      e.stopPropagation()
+      this.init() 
+    })
 
     this.gameBody = gameFrame.querySelector('.app-body')
     this.gameBody.classList.toggle('game-body')
     this.gameBoard = gameFrame.querySelector('.app-board')
+    this.canvas = this.gameBoard.querySelector('game-canvas')
     this.infoBlock = gameFrame.querySelector('.app-info')
 
     holder.appendChild(gameFrame)
