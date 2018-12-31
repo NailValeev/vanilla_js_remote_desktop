@@ -10,6 +10,9 @@ import { PWDWindow } from './PWDWindow.js'
 export default class Game extends PWDWindow {
   constructor (gameId) {
     super('Game', gameId)
+    this.ballRadius = 5
+    this.deltaX = 2   
+    this.deltaY = -2 
   }
 
   begin () {
@@ -38,13 +41,18 @@ export default class Game extends PWDWindow {
     this.context = this.canvas.getContext('2d')
     this.x = this.canvas.width/2
     this.y = this.canvas.height-30
-    this.deltaX = 2   
-    this.deltaY = -2 
     setInterval( () => {this.draw()}, 20) // 50 fps
-    this.frameHandler
   }
 
   draw () {
+    console.log('this.deltaY ' + this.deltaY)
+    console.log('this.y ' + this.y)
+    if ( (this.y + this.deltaY > this.canvas.height) || (this.y + this.deltaY < 0 ) ) {
+      this.deltaY = -this.deltaY
+    }
+    if ( (this.x + this.deltaX > this.canvas.width) || (this.x + this.deltaX < 0 ) ) {
+      this.deltaX = -this.deltaX
+    }
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
     this.drawBall()
     this.x += this.deltaX
@@ -53,7 +61,7 @@ export default class Game extends PWDWindow {
 
   drawBall () {
     this.context.beginPath()
-    this.context.arc(this.x, this.y, 10, 0, Math.PI*2)
+    this.context.arc(this.x, this.y, this.ballRadius, 0, Math.PI*2)
     this.context.fillStyle = "#0095DD"
     this.context.fill()
     this.context.closePath()
