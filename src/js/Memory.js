@@ -22,9 +22,9 @@ export default class Memory extends PWDWindow {
 
     let gameFrame = document.querySelector('#template-app').content.cloneNode(true)
 
-    gameFrame.querySelector('#run44').addEventListener('click', function (e) { self.init(4, 4) })
-    gameFrame.querySelector('#run22').addEventListener('click', function (e) { self.init(2, 2) })
-    gameFrame.querySelector('#run24').addEventListener('click', function (e) { self.init(2, 4) })
+    gameFrame.querySelector('#run44').addEventListener('click', (e) => { this.init(4, 4) })
+    gameFrame.querySelector('#run22').addEventListener('click', (e) => { this.init(2, 2) })
+    gameFrame.querySelector('#run24').addEventListener('click', (e) => { this.init(2, 4) })
 
     this.gameBody = gameFrame.querySelector('.app-body')
     this.gameBody.classList.toggle('memory-body')

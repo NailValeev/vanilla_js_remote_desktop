@@ -64,6 +64,11 @@ class PWDWindow {
       win.addEventListener('keyup', (e) => { this.handleKeyInput(e.keyCode) })
     }
 
+    else if (name === 'Game') {
+      win.addEventListener('keydown', (e) => { this.handleKeyDown(e.keyCode) })
+      win.addEventListener('keyup', (e) => { this.handleKeyUp(e.keyCode) })
+    }
+
     win.style.zIndex = this.options.zIndex
     win.style.left = this.options.left
     win.style.top = this.options.top
@@ -163,6 +168,24 @@ class PWDWindow {
           }
         }
       }
+    }
+  }
+
+  handleKeyDown (keyCode) {
+    if (keyCode === 39) { // right arrow
+      this.rightMove = true
+    } 
+    else if (keyCode === 37) { // left arrow
+      this.leftMove = true 
+    }
+  }
+
+  handleKeyUp (keyCode) {
+    if (keyCode === 39) { // right arrow
+      this.rightMove = false
+    } 
+    else if (keyCode === 37) { // left arrow
+      this.leftMove = false 
     }
   }
 
