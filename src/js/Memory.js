@@ -91,7 +91,7 @@ export default class Memory extends PWDWindow {
       board.appendChild(newRow)
     }
   }
-  
+
   /**
   * GUI handling on game over
   *
@@ -136,9 +136,8 @@ export default class Memory extends PWDWindow {
     if (!card.classList.contains('suit')) {
       return // already turned
     }
-    
     if (this.countdown === 60) this.startTimer()
-    
+
     this.attemptCounter++
     this.infoBlock.innerHTML = 'Attempts : ' + this.attemptCounter
 

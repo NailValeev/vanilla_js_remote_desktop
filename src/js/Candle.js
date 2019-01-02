@@ -12,7 +12,7 @@ export default class Candle {
   * @param {number} y y coordinate for the candle light
   * @param {Boolean} activityStatus status to define display candle light or not
   */
-  constructor (x, y, activityStatus){
+  constructor (x, y, activityStatus) {
     this.x = x
     this.y = y
     this.active = activityStatus

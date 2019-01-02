@@ -6,7 +6,7 @@
 */
 
 export default class Card {
- /**
+  /**
   * Card will be created with pre-defined id and picId
   * @constructor
   * @param {String} id the card identifier in array

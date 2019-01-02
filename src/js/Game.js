@@ -6,7 +6,7 @@
  */
 
 import { PWDWindow } from './PWDWindow.js'
-import Candle from './Candle.js';
+import Candle from './Candle.js'
 
 export default class Game extends PWDWindow {
   constructor (gameId) {
@@ -15,7 +15,7 @@ export default class Game extends PWDWindow {
     this.candleRadius = 7
     this.candles = []
     this.candlesNumber = 5
-    this.deltaX = -2 
+    this.deltaX = -2
     this.deltaY = -1
     this.bookHeight = 3
     this.bookWidth = 70
@@ -26,9 +26,8 @@ export default class Game extends PWDWindow {
     this.candleYpositons = [60, 60, 70, 70, 70]
 
     this.goodShots = 0
-
   }
-  
+
   /**
   * Game beginning, handling of DOM
   *
@@ -38,27 +37,27 @@ export default class Game extends PWDWindow {
   begin () {
     let holder = this.templ.querySelector('.window-content')
     let gameFrame = document.querySelector('#template-game').content.cloneNode(true)
-    
+
     gameFrame.querySelector('#game-start-btn').addEventListener('click', (e) => {
       e.stopPropagation()
       this.startBtn.style.display = 'none'
-      this.init() 
+      this.init()
     })
-    
+
     this.gameBody = gameFrame.querySelector('.app-body')
     this.gameBody.classList.toggle('game-body')
     this.gameBoard = gameFrame.querySelector('.app-board')
     this.infoBlock = gameFrame.querySelector('.app-info')
     this.startBtn = gameFrame.querySelector('#game-start-btn')
     holder.appendChild(gameFrame)
-    
+
     this.expose()
-    
+
     let thisGame = document.querySelector('#' + this.domId)
     this.canvas = thisGame.querySelector('.game-canvas')
     this.context = this.canvas.getContext('2d')
   }
-  
+
   /**
   * Game initialization
   *
@@ -67,8 +66,9 @@ export default class Game extends PWDWindow {
   */
   init () {
     this.goodShots = 0
+    this.infoBlock.innerHTML = ''
 
-    if (this.gameOver){
+    if (this.gameOver) {
       while (this.gameBoard.childElementCount > 1) {
         this.gameBoard.removeChild(this.gameBoard.firstChild) // To clear old results
       }
@@ -76,50 +76,48 @@ export default class Game extends PWDWindow {
       this.canvas.style.display = 'block'
     }
 
-    this.x = this.canvas.width/2
-    this.y = this.canvas.height-30
+    this.x = this.canvas.width / 2
+    this.y = this.canvas.height - 30
     this.bookX = (this.canvas.width - this.bookWidth) / 2
 
-    for (var k = 0; k < this.candlesNumber; k++){
+    for (var k = 0; k < this.candlesNumber; k++) {
       let candle = new Candle(this.candleXpositons[k], this.candleYpositons[k], true)
       this.candles.push(candle)
     }
 
-    this.animation = setInterval( () => {this.draw()}, 20) // 50 fps
+    this.animation = setInterval(() => { this.draw() }, 20) // 50 fps
   }
-  
+
   /**
-  * Drawing on the canvas 
+  * Drawing on the canvas
   *
   * @param {none} _ this.* properties used
   * @returns {undefined} void, handling of this and DOM
   */
   draw () {
-    if ( (this.x + this.deltaX > this.canvas.width-this.ballRadius) || (this.x + this.deltaX < this.ballRadius ) ) {
+    if ((this.x + this.deltaX > this.canvas.width - this.ballRadius) || (this.x + this.deltaX < this.ballRadius)) {
       this.deltaX = -this.deltaX
     }
 
-    if ( this.y + this.deltaY < this.ballRadius ) {
+    if (this.y + this.deltaY < this.ballRadius) {
       this.deltaY = -this.deltaY
-    }
-    else if ( this.y + this.deltaY > this.canvas.height-this.ballRadius) {
-      if(this.x > this.bookX && this.x < this.bookX + this.bookWidth) {
+    } else if (this.y + this.deltaY > this.canvas.height - this.ballRadius) {
+      if (this.x > this.bookX && this.x < this.bookX + this.bookWidth) {
         this.deltaY = -this.deltaY
         if (this.rightMove) this.deltaX += 2
         else if (this.leftMove) this.deltaX -= 2
       } else {
-        this.endGame (false)
+        this.endGame(false)
       }
     }
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.drawBall()
     this.x += this.deltaX
     this.y += this.deltaY
-    
-    if(this.rightMove && this.bookX < this.canvas.width - this.bookWidth ) {
+
+    if (this.rightMove && this.bookX < this.canvas.width - this.bookWidth) {
       this.bookX += 7
-    }
-    else if(this.leftMove && this.bookX > 0) {
+    } else if (this.leftMove && this.bookX > 0) {
       this.bookX -= 7
     }
     this.drawBook()
@@ -131,15 +129,15 @@ export default class Game extends PWDWindow {
   }
 
   /**
-  * Drawing the ball 
+  * Drawing the ball
   *
   * @param {none} _ this.* properties used
   * @returns {undefined} void, handling of this and DOM
   */
   drawBall () {
     this.context.beginPath()
-    this.context.arc(this.x, this.y, this.ballRadius, 0, Math.PI*2)
-    this.context.fillStyle = "#dd4422"
+    this.context.arc(this.x, this.y, this.ballRadius, 0, Math.PI * 2)
+    this.context.fillStyle = '#dd4422'
     this.context.fill()
     this.context.closePath()
   }
@@ -153,27 +151,27 @@ export default class Game extends PWDWindow {
   drawBook () {
     this.context.beginPath()
     this.context.rect(this.bookX, this.canvas.height - this.bookHeight, this.bookWidth, this.bookHeight)
-    this.context.fillStyle = "#cceeff"
+    this.context.fillStyle = '#cceeff'
     this.context.fill()
     this.context.closePath()
   }
 
   /**
-  * Drawing of blinkikng candle lightss 
+  * Drawing of blinkikng candle lightss
   *
   * @param {none} _ this.* properties used
   * @returns {undefined} void, handling of this and DOM
   */
-  drawCandles() {
-    if ( this.candles.length === 0) return 
-    for(var i = 0; i < this.candlesNumber; i++) {
-      if ( this.candles[i].active === true) {
+  drawCandles () {
+    if (this.candles.length === 0) return
+    for (var i = 0; i < this.candlesNumber; i++) {
+      if (this.candles[i].active === true) {
         this.context.beginPath()
-        this.context.arc(this.candles[i].x, this.candles[i].y, this.candleRadius, 0, Math.PI*2)
-        if (this.y % 2 === 1){
-          this.context.fillStyle = "#ff8c00"
+        this.context.arc(this.candles[i].x, this.candles[i].y, this.candleRadius, 0, Math.PI * 2)
+        if (this.y % 2 === 1) {
+          this.context.fillStyle = '#ff8c00'
         } else {
-          this.context.fillStyle = "#48d1cc"
+          this.context.fillStyle = '#48d1cc'
         }
         this.context.fill()
         this.context.closePath()
@@ -182,37 +180,36 @@ export default class Game extends PWDWindow {
   }
 
   /**
-  * Checking for collisions between the ball and candle lights 
+  * Checking for collisions between the ball and candle lights
   *
   * @param {none} _ this.* properties used
   * @returns {undefined} void, handling of this and DOM
   */
-  checkCandlesCollision() {
-    if ( this.candles.length === 0) return 
-    for(var m = 0; m < this.candlesNumber; m++) {
+  checkCandlesCollision () {
+    if (this.candles.length === 0) return
+    for (var m = 0; m < this.candlesNumber; m++) {
       var candle = this.candles[m]
       if (!candle.active) continue
-      if( 
-          Math.abs(this.x - candle.x) < (this.candleRadius + this.ballRadius) && 
-          Math.abs(this.y - candle.y) < (this.candleRadius + this.ballRadius)
-        ) {
-          candle.active = false
-          this.goodShots ++
-          this.deltaY = -this.deltaY
+      if (Math.abs(this.x - candle.x) < (this.candleRadius + this.ballRadius) &&
+          Math.abs(this.y - candle.y) < (this.candleRadius + this.ballRadius)) {
+        candle.active = false
+        this.goodShots++
+        this.infoBlock.innerHTML = 'You have blow ' + this.goodShots + ' candles of ' + this.candlesNumber
+        this.deltaY = -this.deltaY
       }
     }
   }
-  
+
   /**
-  * Handling of game end 
+  * Handling of game end
   *
   * @param {Boolean} isWinnerFlag flag to handle winner / loser status
   * @returns {undefined} void, handling of this and DOM
   */
-  endGame ( isWinnerFlag ) {
+  endGame (isWinnerFlag) {
     this.gameOver = true
     this.candles = []
-    this.deltaX = -2 
+    this.deltaX = -2
     this.deltaY = -1
     clearInterval(this.animation)
     this.startBtn.style.display = 'inline'

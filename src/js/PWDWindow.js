@@ -32,7 +32,7 @@ class PWDWindow {
     win.querySelector('span').innerHTML = name + ' ' + gameId
     win.querySelector('.window-icon').src = 'image/' + name.toLowerCase() + '.png'
     win.querySelector('.close-button').addEventListener('click', (e) => {
-      this.close('#' + this.domId, e) 
+      this.close('#' + this.domId, e)
     })
     win.addEventListener('click', (e) => {
       e.preventDefault()
@@ -58,9 +58,7 @@ class PWDWindow {
 
     if (name === 'Memory') {
       win.addEventListener('keyup', (e) => { this.handleKeyInput(e.keyCode) })
-    }
-
-    else if (name === 'Game') {
+    } else if (name === 'Game') {
       win.addEventListener('keydown', (e) => { this.handleKeyDown(e.keyCode) })
       win.addEventListener('keyup', (e) => { this.handleKeyUp(e.keyCode) })
     }
@@ -191,9 +189,8 @@ class PWDWindow {
   handleKeyDown (keyCode) {
     if (keyCode === 39) { // right arrow
       this.rightMove = true
-    } 
-    else if (keyCode === 37) { // left arrow
-      this.leftMove = true 
+    } else if (keyCode === 37) { // left arrow
+      this.leftMove = true
     }
   }
 
@@ -207,9 +204,8 @@ class PWDWindow {
   handleKeyUp (keyCode) {
     if (keyCode === 39) { // right arrow
       this.rightMove = false
-    } 
-    else if (keyCode === 37) { // left arrow
-      this.leftMove = false 
+    } else if (keyCode === 37) { // left arrow
+      this.leftMove = false
     }
   }
 }

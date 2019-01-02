@@ -31,7 +31,6 @@ export default class Chat extends PWDWindow {
   begin () {
     // Show not connected status - will be connected on init only
     this.showDisconnected()
-    // TODO check if user has nickname saved
     if (window.localStorage.getItem('nickname')) {
       this.nickname = window.localStorage.getItem('nickname')
     }
@@ -41,21 +40,19 @@ export default class Chat extends PWDWindow {
     this.btnBlock = chatFrame.querySelector('.app-buttons')
     this.msgInputBlock = chatFrame.querySelector('.msg-input-block')
     this.nameInputBlock = chatFrame.querySelector('.name-input-block')
-    
+
     this.startBtn = chatFrame.querySelector('#start-btn')
-    this.startBtn.addEventListener('click', (e) => { 
-      e.stopPropagation() 
-      this.init(); 
+    this.startBtn.addEventListener('click', (e) => {
+      e.stopPropagation()
+      this.init()
     })
-    
     this.resetBtn = chatFrame.querySelector('#reset-btn')
     this.resetBtn.addEventListener('click', (e) => {
       e.stopPropagation()
-      localStorage.removeItem('nickname')
+      window.localStorage.removeItem('nickname')
       this.nickname = ''
       this.checkNickname()
     })
-    
     this.nameInput = chatFrame.querySelector('#name-input')
     this.nameInput.addEventListener('click', (e) => {
       e.stopPropagation()
@@ -63,13 +60,11 @@ export default class Chat extends PWDWindow {
     this.nameInput.addEventListener('keyup', (e) => {
       this.nickname = this.nameInput.value
     })
-    
     this.saveBtn = chatFrame.querySelector('#save-btn')
     this.saveBtn.addEventListener('click', (e) => {
       e.stopPropagation()
       this.saveNickname()
     })
-    
     this.msgInput = chatFrame.querySelector('#msg-input')
     this.msgInput.addEventListener('click', (e) => {
       e.stopPropagation()
@@ -77,19 +72,17 @@ export default class Chat extends PWDWindow {
     this.msgInput.addEventListener('keyup', () => {
       this.outputMessage = this.msgInput.value
     })
-
     this.sendBtn = chatFrame.querySelector('#send-btn')
     this.sendBtn.addEventListener('click', (e) => {
       e.stopPropagation()
       this.sendMessage()
     })
-    
     this.chatBody = chatFrame.querySelector('.app-body')
     this.chatBody.classList.toggle('chat-body')
     this.chatBoard = chatFrame.querySelector('.app-board')
-    
+
     holder.appendChild(chatFrame)
-    
+
     this.checkNickname()
     this.expose()
   }
@@ -99,11 +92,11 @@ export default class Chat extends PWDWindow {
   *
   * @param {none} _ , this.nickname used
   * @returns {undefined} void, handling of this and DOM
-  */ 
-  checkNickname () {     
+  */
+  checkNickname () {
     if (this.nickname !== '') { // Actually, if(this.nickname) works, too
       this.resetBtn.style.display = 'inline'
-      if (this.btnBlock.querySelector('.name-holder') === null){
+      if (this.btnBlock.querySelector('.name-holder') === null) {
         let nameHolder = document.createElement('span')
         nameHolder.classList.toggle('name-holder')
         nameHolder.innerHTML = 'Hi, ' + this.nickname
@@ -113,7 +106,6 @@ export default class Chat extends PWDWindow {
         this.btnBlock.querySelector('.name-holder').innerHTML = 'Hi, ' + this.nickname
       }
 
-      
       if (!this.connected) { // name will be changed, chat has been initialized
         this.startBtn.style.display = 'inline'
         this.startBtn.innerHTML = 'Start chat as ' + this.nickname
@@ -125,7 +117,7 @@ export default class Chat extends PWDWindow {
       this.nameInput.placeholder = 'Nickname'
     }
   }
-  
+
   /**
   * Chat initialization
   *
@@ -134,22 +126,21 @@ export default class Chat extends PWDWindow {
   */
   init () {
     if (this.connecting) return // Already trying to connect, prevent multiple clicks
-    
+
     this.connecting = true
-    
+
     let infoBox = document.createElement('div')
     infoBox.classList.toggle('checking-holder')
-    if ( !this.chatBoard.classList.contains('.checking-holder')){
+    if (!this.chatBoard.classList.contains('.checking-holder')) {
       this.chatBoard.appendChild(infoBox)
     }
     this.connection = new WebSocket(this.server)
     this.connection.onerror = (event) => { console.log(this.domId + ' conection error' + event) }
-    this.connection.onclose = (event) => { 
+    this.connection.onclose = (event) => {
       console.log('Chat ' + this.domId + ' connection closed')
       this.connected = false
       this.showDisconnected()
     }
-
     this.connection.onopen = (event) => {
       this.connected = true
       this.showConnected()
@@ -158,31 +149,30 @@ export default class Chat extends PWDWindow {
     this.connection.onmessage = (event) => {
       let msg = JSON.parse(event.data)
       if (msg.type === 'heartbeat') {
-        // console.log('Heartbeat from the ' + msg.username) // Ignore me
+        // console.log('Heartbeat from the ' + msg.username) // Ignore
       } else if (msg.type === 'notification' && msg.data === 'You are connected!') {
-        setTimeout( 
-          () => {
-            this.chatBoard.removeChild(this.chatBoard.firstChild) // Connecting image
-            let messenger = document.createElement('div')
-            messenger.classList.toggle('messenger')
-            this.chatBoard.appendChild(messenger) // Connecting image
-            this.messenger = this.chatBoard.querySelector('.messenger')
+        setTimeout(() => {
+          this.chatBoard.removeChild(this.chatBoard.firstChild) // Connecting image
+          let messenger = document.createElement('div')
+          messenger.classList.toggle('messenger')
+          this.chatBoard.appendChild(messenger) // Connecting image
+          this.messenger = this.chatBoard.querySelector('.messenger')
 
-            this.msgInputBlock.style.display = 'block'
-            this.msgInput.value = ''
+          this.msgInputBlock.style.display = 'block'
+          this.msgInput.value = ''
 
-            this.msgInput.placeholder = 'Your message'
-            
-            this.messages = this.getMessages()
-            this.messages.forEach( (msg) => this.displayMessage(msg))
-          }, 1000 )
-        } else  if (msg.type === 'message'){
-          this.saveMessage (msg)
-          this.displayMessage( msg )
-        }
+          this.msgInput.placeholder = 'Your message'
+
+          this.messages = this.getMessages()
+          this.messages.forEach((msg) => this.displayMessage(msg))
+        }, 1000)
+      } else if (msg.type === 'message') {
+        this.saveMessage(msg)
+        this.displayMessage(msg)
+      }
     }
   }
-  
+
   /**
   * Saving nickname to localstorage
   *
@@ -195,8 +185,6 @@ export default class Chat extends PWDWindow {
       window.localStorage.setItem('nickname', nick)
       this.nameInputBlock.style.display = 'none'
       this.checkNickname()
-    } else {
-      return
     }
   }
 
@@ -212,7 +200,7 @@ export default class Chat extends PWDWindow {
     icon.classList.toggle('conn-icon')
     icon.src = 'image/disconnect.png'
     this.windowHeader.appendChild(icon)
-  } 
+  }
 
   /**
   * Handling of GUI when connection was established
@@ -223,14 +211,14 @@ export default class Chat extends PWDWindow {
   showConnected () {
     this.windowHeader.querySelector('.conn-icon').src = 'image/connected.png'
     this.startBtn.style.display = 'none'
-  } 
+  }
 
   /**
   * Sending message to the server
   *
   * @param {none} _ this.* properties used
   * @returns {undefined} void, handling DOM and this
-  *   
+  *
   */
   sendMessage () {
     let msg = {
@@ -281,7 +269,7 @@ export default class Chat extends PWDWindow {
   /**
   * Reading of string from localstorage and parsing it to an array
   *
-  * @param {none} _ 
+  * @param {none} _ reading from local storage
   * @throws {none} nothing crucial to throw
   * @returns {Object[]} scores array with messages
   */
@@ -290,5 +278,4 @@ export default class Chat extends PWDWindow {
     if (result === null) result = [] // Avoid NullPointer on empty array
     return result
   }
-
 }
