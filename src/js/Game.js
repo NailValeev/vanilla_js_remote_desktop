@@ -6,17 +6,27 @@
  */
 
 import { PWDWindow } from './PWDWindow.js'
+import Apple from './Apple.js';
 
 export default class Game extends PWDWindow {
   constructor (gameId) {
     super('Game', gameId)
     this.ballRadius = 5
+    this.appleRadius = 5
+    this.apples = []
+    this.applesNumber = 1
     this.deltaX = 2   
     this.deltaY = -2
     this.bookHeight = 10
     this.bookWidth = 70
     this.rightMove = false
     this.leftMove = false
+
+    this.appleXpositons = [20, 50, 150]
+    this.appleYpositons = [20, 50, 50]
+
+    this.goodShots = 0
+
   }
   
   begin () {
@@ -46,6 +56,7 @@ export default class Game extends PWDWindow {
   
   init () {
     console.log('init()')
+    this.goodShots = 0
 
     if (this.gameOver){
       while (this.gameBoard.childElementCount > 1) {
@@ -58,6 +69,13 @@ export default class Game extends PWDWindow {
     this.x = this.canvas.width/2
     this.y = this.canvas.height-30
     this.bookX = (this.canvas.width - this.bookWidth) / 2
+
+    for (var k = 0; k < this.applesNumber; k++){
+      console.log('Drawing apple n' + k)
+      let apple = new Apple(this.appleXpositons[k], this.appleYpositons[k], true)
+      this.apples.push(apple)
+    }
+
     this.animation = setInterval( () => {this.draw()}, 20) // 50 fps
   }
   
@@ -73,12 +91,7 @@ export default class Game extends PWDWindow {
       if(this.x > this.bookX && this.x < this.bookX + this.bookWidth) {
         this.deltaY = -this.deltaY
       } else {
-        this.gameOver = true
-        clearInterval(this.animation)
-        this.startBtn.style.display = 'inline'
-        console.log('You lose')
-        this.message('You LOSE !', false)
-        // TODO Implement UI for loser 
+        this.endGame (false)
       }
     }
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -93,6 +106,11 @@ export default class Game extends PWDWindow {
       this.bookX -= 7
     }
     this.drawBook()
+    this.drawApples()
+    this.checkApplesCollision()
+    if (this.goodShots === this.applesNumber) {
+      this.endGame(true)
+    }
   }
 
   drawBall () {
@@ -111,8 +129,50 @@ export default class Game extends PWDWindow {
     this.context.closePath()
   }
 
+  drawApples() {
+    for(var i = 0; i < this.applesNumber; i++) {
+      if ( this.apples[i].active === true) {
+        this.context.beginPath()
+        this.context.arc(this.apples[i].x, this.apples[i].y, this.appleRadius, 0, Math.PI*2)
+        this.context.fillStyle = "#0095DD"
+        this.context.fill()
+        this.context.closePath()
+      }
+    }
+  }
+
+  checkApplesCollision() {
+    for(var m = 0; m < this.applesNumber; m++) {
+      var apple = this.apples[m]
+      if (!apple.active) continue
+      if( 
+          Math.abs(this.x - apple.x) < (this.appleRadius + this.ballRadius) && 
+          Math.abs(this.y - apple.y) < (this.appleRadius + this.ballRadius)
+        ) {
+          apple.active = false
+          this.goodShots ++
+          console.log (this.goodShots + ' apples of ' + this.applesNumber)
+          this.deltaY = -this.deltaY
+      }
+    }
+  }
+  
+  endGame ( isWinnerFlag ) {
+
+    this.gameOver = true
+    this.apples = []
+    clearInterval(this.animation)
+    this.startBtn.style.display = 'inline'
+    console.log('Game over, winner: ' + isWinnerFlag)
+
+    let message = isWinnerFlag ? 'YOU WIN !' : 'YOU LOSE!'
+
+    this.message(message, isWinnerFlag)
+
+  }
+
   message (message, winnerFlag) {
-    console.log('winner: ' + winnerFlag)
+    console.log('message, winner: ' + winnerFlag)
 
     let board = document.createElement('div')
     board.classList.toggle('memory-board')
