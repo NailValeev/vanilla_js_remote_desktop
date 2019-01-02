@@ -12,18 +12,18 @@ export default class Game extends PWDWindow {
   constructor (gameId) {
     super('Game', gameId)
     this.ballRadius = 5
-    this.appleRadius = 5
+    this.appleRadius = 7
     this.apples = []
-    this.applesNumber = 1
-    this.deltaX = 2   
-    this.deltaY = -2
+    this.applesNumber = 5
+    this.deltaX = -2 
+    this.deltaY = -1
     this.bookHeight = 10
     this.bookWidth = 70
     this.rightMove = false
     this.leftMove = false
 
-    this.appleXpositons = [20, 50, 150]
-    this.appleYpositons = [20, 50, 50]
+    this.appleXpositons = [192, 238, 165, 215, 265]
+    this.appleYpositons = [60, 60, 70, 70, 70]
 
     this.goodShots = 0
 
@@ -130,6 +130,7 @@ export default class Game extends PWDWindow {
   }
 
   drawApples() {
+    if ( this.apples.length === 0) return 
     for(var i = 0; i < this.applesNumber; i++) {
       if ( this.apples[i].active === true) {
         this.context.beginPath()
@@ -142,6 +143,7 @@ export default class Game extends PWDWindow {
   }
 
   checkApplesCollision() {
+    if ( this.apples.length === 0) return 
     for(var m = 0; m < this.applesNumber; m++) {
       var apple = this.apples[m]
       if (!apple.active) continue
@@ -161,6 +163,8 @@ export default class Game extends PWDWindow {
 
     this.gameOver = true
     this.apples = []
+    this.deltaX = -2 
+    this.deltaY = -1
     clearInterval(this.animation)
     this.startBtn.style.display = 'inline'
     console.log('Game over, winner: ' + isWinnerFlag)

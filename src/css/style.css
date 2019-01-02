@@ -351,4 +351,5 @@ div:focus {
     background-color: black;
     display: block;
     margin: auto;
+    background-image: url("../image/game-bg.jpg")
 }
