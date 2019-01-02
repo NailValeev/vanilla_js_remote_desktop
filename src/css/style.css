@@ -159,7 +159,7 @@ ul.osx-dock li:hover span {
 }
 
 .chat-body {
-   background-color: goldenrod; 
+   background-color: darkturquoise; 
 }
 
 .game-body {
@@ -235,7 +235,7 @@ ul.osx-dock li:hover span {
     margin: auto;
     height: 200px;
     width: 200px;
-    background-color: goldenrod;
+    background-color: darkturquoise;
     background-image: url("../image/checking.gif")
 }
 
@@ -268,12 +268,13 @@ div:focus {
 }
 
 .messenger {
-    background-color: lightpink;
+    background-color: turquoise;
     height: 270px;
     width: 96%;
     display: block;
     margin: auto;
     overflow: auto;
+    border-top: 5px;
 }
 
 .msg {
