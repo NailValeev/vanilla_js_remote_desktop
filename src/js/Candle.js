@@ -1,4 +1,4 @@
-export default class Apple {
+export default class Candle {
 
     constructor (x, y, activityStatus){
         this.x = x

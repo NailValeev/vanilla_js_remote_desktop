@@ -6,24 +6,24 @@
  */
 
 import { PWDWindow } from './PWDWindow.js'
-import Apple from './Apple.js';
+import Candle from './Candle.js';
 
 export default class Game extends PWDWindow {
   constructor (gameId) {
     super('Game', gameId)
     this.ballRadius = 5
-    this.appleRadius = 7
-    this.apples = []
-    this.applesNumber = 5
+    this.candleRadius = 7
+    this.candles = []
+    this.candlesNumber = 5
     this.deltaX = -2 
     this.deltaY = -1
-    this.bookHeight = 10
+    this.bookHeight = 3
     this.bookWidth = 70
     this.rightMove = false
     this.leftMove = false
 
-    this.appleXpositons = [192, 238, 165, 215, 265]
-    this.appleYpositons = [60, 60, 70, 70, 70]
+    this.candleXpositons = [192, 238, 165, 215, 265]
+    this.candleYpositons = [60, 60, 70, 70, 70]
 
     this.goodShots = 0
 
@@ -70,10 +70,10 @@ export default class Game extends PWDWindow {
     this.y = this.canvas.height-30
     this.bookX = (this.canvas.width - this.bookWidth) / 2
 
-    for (var k = 0; k < this.applesNumber; k++){
-      console.log('Drawing apple n' + k)
-      let apple = new Apple(this.appleXpositons[k], this.appleYpositons[k], true)
-      this.apples.push(apple)
+    for (var k = 0; k < this.candlesNumber; k++){
+      console.log('Drawing candle n' + k)
+      let candle = new Candle(this.candleXpositons[k], this.candleYpositons[k], true)
+      this.candles.push(candle)
     }
 
     this.animation = setInterval( () => {this.draw()}, 20) // 50 fps
@@ -90,6 +90,8 @@ export default class Game extends PWDWindow {
     else if ( this.y + this.deltaY > this.canvas.height-this.ballRadius) {
       if(this.x > this.bookX && this.x < this.bookX + this.bookWidth) {
         this.deltaY = -this.deltaY
+        if (this.rightMove) this.deltaX += 2
+        else if (this.leftMove) this.deltaX -= 2
       } else {
         this.endGame (false)
       }
@@ -106,9 +108,9 @@ export default class Game extends PWDWindow {
       this.bookX -= 7
     }
     this.drawBook()
-    this.drawApples()
-    this.checkApplesCollision()
-    if (this.goodShots === this.applesNumber) {
+    this.drawCandles()
+    this.checkCandlesCollision()
+    if (this.goodShots === this.candlesNumber) {
       this.endGame(true)
     }
   }
@@ -116,7 +118,7 @@ export default class Game extends PWDWindow {
   drawBall () {
     this.context.beginPath()
     this.context.arc(this.x, this.y, this.ballRadius, 0, Math.PI*2)
-    this.context.fillStyle = "#0095DD"
+    this.context.fillStyle = "#dd4422"
     this.context.fill()
     this.context.closePath()
   }
@@ -124,36 +126,40 @@ export default class Game extends PWDWindow {
   drawBook () {
     this.context.beginPath()
     this.context.rect(this.bookX, this.canvas.height - this.bookHeight, this.bookWidth, this.bookHeight)
-    this.context.fillStyle = "#0095DD"
+    this.context.fillStyle = "#cceeff"
     this.context.fill()
     this.context.closePath()
   }
 
-  drawApples() {
-    if ( this.apples.length === 0) return 
-    for(var i = 0; i < this.applesNumber; i++) {
-      if ( this.apples[i].active === true) {
+  drawCandles() {
+    if ( this.candles.length === 0) return 
+    for(var i = 0; i < this.candlesNumber; i++) {
+      if ( this.candles[i].active === true) {
         this.context.beginPath()
-        this.context.arc(this.apples[i].x, this.apples[i].y, this.appleRadius, 0, Math.PI*2)
-        this.context.fillStyle = "#0095DD"
+        this.context.arc(this.candles[i].x, this.candles[i].y, this.candleRadius, 0, Math.PI*2)
+        if (this.y % 2 === 1){
+          this.context.fillStyle = "#ff8c00"
+        } else {
+          this.context.fillStyle = "#48d1cc"
+        }
         this.context.fill()
         this.context.closePath()
       }
     }
   }
 
-  checkApplesCollision() {
-    if ( this.apples.length === 0) return 
-    for(var m = 0; m < this.applesNumber; m++) {
-      var apple = this.apples[m]
-      if (!apple.active) continue
+  checkCandlesCollision() {
+    if ( this.candles.length === 0) return 
+    for(var m = 0; m < this.candlesNumber; m++) {
+      var candle = this.candles[m]
+      if (!candle.active) continue
       if( 
-          Math.abs(this.x - apple.x) < (this.appleRadius + this.ballRadius) && 
-          Math.abs(this.y - apple.y) < (this.appleRadius + this.ballRadius)
+          Math.abs(this.x - candle.x) < (this.candleRadius + this.ballRadius) && 
+          Math.abs(this.y - candle.y) < (this.candleRadius + this.ballRadius)
         ) {
-          apple.active = false
+          candle.active = false
           this.goodShots ++
-          console.log (this.goodShots + ' apples of ' + this.applesNumber)
+          console.log (this.goodShots + ' candles of ' + this.candlesNumber)
           this.deltaY = -this.deltaY
       }
     }
@@ -162,7 +168,7 @@ export default class Game extends PWDWindow {
   endGame ( isWinnerFlag ) {
 
     this.gameOver = true
-    this.apples = []
+    this.candles = []
     this.deltaX = -2 
     this.deltaY = -1
     clearInterval(this.animation)
