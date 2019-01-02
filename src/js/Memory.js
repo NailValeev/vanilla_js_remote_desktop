@@ -13,13 +13,14 @@ export default class Memory extends PWDWindow {
     super('Memory', gameId)
     this.gameId = gameId
   }
-
+  /**
+  * Memory game beginning, handling of DOM
+  *
+  * @param {none} _ , template defined in the index file
+  * @returns {undefined} void, handling of this and DOM
+  */
   begin () {
-    console.log('new Memory game ' + this.gameId + ' begins')
-    let self = this
-
     let holder = this.templ.querySelector('.window-content')
-
     let gameFrame = document.querySelector('#template-app').content.cloneNode(true)
 
     gameFrame.querySelector('#run44').addEventListener('click', (e) => { this.init(4, 4) })
@@ -31,7 +32,6 @@ export default class Memory extends PWDWindow {
     this.gameBoard = gameFrame.querySelector('.app-board')
     this.infoBlock = gameFrame.querySelector('.app-info')
     this.timerBlock = gameFrame.querySelector('.app-timer')
-
     this.timerBlock.innerHTML = ''
 
     holder.appendChild(gameFrame)
@@ -40,10 +40,16 @@ export default class Memory extends PWDWindow {
     this.init()
   }
 
+  /**
+  * Memory game initialization
+  *
+  * @param {number} rows number of rows with memory cards
+  * @param {number} cols number of rows with memory cards
+  * @returns {undefined} void, handling of this
+  */
   init (rows, cols) {
     this.pause()
-    console.log('init Memory game with ' + rows + ' rows and ' + cols + ' columns')
-    // Defaults
+    // Defaults, if missing parameters
     this.rows = rows || 2
     this.cols = cols || 2
 
@@ -85,7 +91,14 @@ export default class Memory extends PWDWindow {
       board.appendChild(newRow)
     }
   }
-
+  
+  /**
+  * GUI handling on game over
+  *
+  * @param {String} message text to be displayed for player
+  * @param {Boolean} winnerFlag to indicate is player winner or not
+  * @returns {undefined} void, handling of this
+  */
   message (message, winnerFlag) {
     console.log('winner: ' + winnerFlag)
 
@@ -115,9 +128,14 @@ export default class Memory extends PWDWindow {
     board.appendChild(ImgDiv)
   }
 
+  /**
+  * Turning the memory card
+  *
+  * @param {Card} card card object to be turned, compared etc
+  * @returns {undefined} void, handling of this
+  */
   turn (card) {
     if (!card.classList.contains('suit')) {
-      console.log('this card is already turned!')
       return // already turned
     }
     
@@ -154,10 +172,6 @@ export default class Memory extends PWDWindow {
         this.turnedCards = []
         this.turnedCardsCounter = 0
         if (this.guessedCounter === this.numberOfCards) {
-          card.classList.toggle('suit')
-          card.style.backgroundImage = 'url(../image/0.jpg'
-          oldCard.classList.toggle('suit')
-          oldCard.style.backgroundImage = 'url(../image/0.jpg'
           this.pause()
           this.message('YOU WIN !!!', true)
         }
@@ -171,18 +185,16 @@ export default class Memory extends PWDWindow {
   * Handling UI elements and the countdown functionality
   *
   * @param {none}
-  * @throws {none} nothing to throw, if any UI error, will be catched by 'onerror' event listener
   * @returns {undefined} void
   */
   startTimer () {
-    let self = this
-    this.intervalHandler = setInterval(function () {
-      self.countdown--
-      if (self.countdown <= 0) {
-        clearInterval(self.intervalHandler)
-        self.message('YOU LOSE !!!', false)
+    this.intervalHandler = setInterval(() => {
+      this.countdown--
+      if (this.countdown <= 0) {
+        clearInterval(this.intervalHandler)
+        this.message('YOU LOSE !!!', false)
       } else {
-        self.timerBlock.innerHTML = self.countdown
+        this.timerBlock.innerHTML = this.countdown
       }
     }, 1000)
   }
@@ -191,7 +203,6 @@ export default class Memory extends PWDWindow {
   * To stop the timer / countdowns
   *
   * @param {none}
-  * @throws {none} nothing to throw, if any UI error, will be catched by 'onerror' event listener
   * @returns {undefined} void
   */
   pause () {
