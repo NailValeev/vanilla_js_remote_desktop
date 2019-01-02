@@ -100,8 +100,6 @@ export default class Memory extends PWDWindow {
   * @returns {undefined} void, handling of this
   */
   message (message, winnerFlag) {
-    console.log('winner: ' + winnerFlag)
-
     let board = document.createElement('div')
     board.classList.toggle('memory-board')
 

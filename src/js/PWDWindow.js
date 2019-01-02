@@ -9,6 +9,7 @@ class PWDWindow {
   * Creates window on the desktop
   * Refreshing of a desktop
   *
+  * @constructor
   * @param {none}
   * @throws {none} nothing crucial to throw
   * @returns {NodeModule templ} window - holder for any application
@@ -41,19 +42,14 @@ class PWDWindow {
     win.addEventListener('dragstart', function (e) {
       self.dragOptions = { startX: e.clientX, startY: e.clientY }
       e.dataTransfer.setData('text/plain', e.target.id)
-      console.log(e)
-      console.log('Start : ' + self.dragOptions.startX + ', ' + self.dragOptions.startY)
     })
 
     win.addEventListener('dragend', function (e) {
-      console.log(e)
       e.preventDefault()
       self.dragOptions.endX = e.clientX
       self.dragOptions.endY = e.clientY
-      console.log('End : ' + self.dragOptions.endX + ', ' + self.dragOptions.endY)
       let deltaX = self.dragOptions.endX - self.dragOptions.startX
       let deltaY = self.dragOptions.endY - self.dragOptions.startY
-      console.log('deltaX: ' + deltaX + ', deltaY: ' + deltaY)
 
       e.target.style.left = (e.target.offsetLeft + deltaX) + 'px'
       e.target.style.top = (e.target.offsetTop + deltaY) + 'px'
@@ -77,13 +73,18 @@ class PWDWindow {
     // win.style = options (incorrect, data set contains id)
   }
 
+  /**
+  * Closing window
+  *
+  * @param {String} elementId ID of window to be closed
+  * @param {Event} e send as paramter to stop propagation
+  * @throws {none} nothing crucial to throw
+  * @returns {undefined} void
+  */
   close (elementId, e) {
-    console.log('closing window ' + elementId)
     if (this.name === 'Chat') {
-      console.log ('Closing connection for ' + elementId )
       if (this.connection !== null) this.connection.close()
     } else if (this.name === 'Memory') {
-      console.log ('Clearing interval for ' + elementId )
       clearInterval(this.intervalHandler)
       this.pause()
     }
@@ -91,19 +92,31 @@ class PWDWindow {
     e.stopPropagation()
   }
 
+  /**
+  * Moving window to the top of other via z-index
+  *
+  * @param {String} elementId ID of window to be moved to the top
+  * @throws {none} nothing crucial to throw
+  * @returns {undefined} void
+  */
   toTheTop (elementId) {
     let win = document.querySelector(elementId)
     if (win === null) return
 
     win.focus()
     if (Number(win.style.zIndex) === window.dt.getCurrentZ()) {
-      console.log('window ' + elementId + ' already at the top')
       return // on the top
     }
-    console.log('moving window ' + elementId + 'to the top')
     win.style.zIndex = window.dt.getNextZ()
   }
 
+  /**
+  * Displaying the window, setting focus
+  *
+  * @param {none} _ no parameters, handling of this
+  * @throws {none} nothing crucial to throw
+  * @returns {undefined} void
+  */
   expose () {
     this.desktop.appendChild(this.templ)
     document.querySelector('#' + this.domId).focus()
@@ -118,14 +131,12 @@ class PWDWindow {
   */
   handleKeyInput (keyCode) {
     if (this.countdown <= 1) return
-    console.log('keyCode ' + keyCode)
     // For memory game
     let activeEl = document.activeElement
 
     let memoryBoard = activeEl.querySelector('.memory-board')
 
     if (memoryBoard != null) { // memory game
-      console.log('Active element is memory game')
       if (memoryBoard.querySelector('.selected') == null && memoryBoard.querySelector('.memory-card') != null) {
         memoryBoard.firstChild.firstChild.classList.add('selected')
       } else {
@@ -170,7 +181,13 @@ class PWDWindow {
       }
     }
   }
-
+  /**
+  * Handling of key pressed to move the book to the side
+  *
+  * @param {number} keyCode code of key to be handled
+  * @throws {none} nothing crucial to throw
+  * @returns {undefined} void
+  */
   handleKeyDown (keyCode) {
     if (keyCode === 39) { // right arrow
       this.rightMove = true
@@ -180,20 +197,19 @@ class PWDWindow {
     }
   }
 
+  /**
+  * Handling of key released to stop the book moving
+  *
+  * @param {number} keyCode code of key to be handled
+  * @throws {none} nothing crucial to throw
+  * @returns {undefined} void
+  */
   handleKeyUp (keyCode) {
     if (keyCode === 39) { // right arrow
       this.rightMove = false
     } 
     else if (keyCode === 37) { // left arrow
       this.leftMove = false 
-    }
-  }
-
-  getSelCardIndex (node) {
-    console.log('test' + node.childElementCount)
-
-    for (let i = 0; i < node.childElemwntCount; i++) {
-      if (node.getChild[i].classList.contains('selected')) return i
     }
   }
 }

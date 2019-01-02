@@ -14,7 +14,6 @@ export default class Deck {
   * @param {number} number number of cards in the deck
   */
   constructor (number) {
-    console.log('Deck constructor for ' + number + ' cards')
     this.deck = []
 
     for (let i = 0; i < number / 2; i++) {

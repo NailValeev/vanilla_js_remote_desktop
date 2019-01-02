@@ -1,5 +1,5 @@
 /**
- * The memory game application.
+ * Chat application
  *
  * @author Nail Valeev
  * @version 1.1.0
@@ -22,8 +22,13 @@ export default class Chat extends PWDWindow {
     this.messages = []
   }
 
+  /**
+  * Chat beginning, handling of DOM
+  *
+  * @param {none} _ template defined in the index file
+  * @returns {undefined} void, handling of this and DOM
+  */
   begin () {
-    console.log('Chat app begin()')
     // Show not connected status - will be connected on init only
     this.showDisconnected()
     // TODO check if user has nickname saved
@@ -88,7 +93,13 @@ export default class Chat extends PWDWindow {
     this.checkNickname()
     this.expose()
   }
-  
+
+  /**
+  * Checking localstorage for nickname saved, propmt to input if not
+  *
+  * @param {none} _ , this.nickname used
+  * @returns {undefined} void, handling of this and DOM
+  */ 
   checkNickname () {     
     if (this.nickname !== '') { // Actually, if(this.nickname) works, too
       this.resetBtn.style.display = 'inline'
@@ -109,19 +120,23 @@ export default class Chat extends PWDWindow {
         this.nameInputBlock.style.display = 'none'
       }
     } else {
-      console.log('Setting / changing the nickname')
       // TODO handle nickname input
       this.nameInputBlock.style.display = 'block'
       this.nameInput.placeholder = 'Nickname'
     }
   }
   
+  /**
+  * Chat initialization
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling of this and DOM
+  */
   init () {
     if (this.connecting) return // Already trying to connect, prevent multiple clicks
     
     this.connecting = true
     
-    console.log('Chat app init()')
     let infoBox = document.createElement('div')
     infoBox.classList.toggle('checking-holder')
     if ( !this.chatBoard.classList.contains('.checking-holder')){
@@ -130,13 +145,12 @@ export default class Chat extends PWDWindow {
     this.connection = new WebSocket(this.server)
     this.connection.onerror = (event) => { console.log(this.domId + ' conection error' + event) }
     this.connection.onclose = (event) => { 
-      console.log(this.domId + ' conection closed' + event)
+      console.log('Chat ' + this.domId + ' connection closed')
       this.connected = false
       this.showDisconnected()
     }
 
     this.connection.onopen = (event) => {
-      console.log('conection opened' + event)
       this.connected = true
       this.showConnected()
     }
@@ -146,7 +160,6 @@ export default class Chat extends PWDWindow {
       if (msg.type === 'heartbeat') {
         // console.log('Heartbeat from the ' + msg.username) // Ignore me
       } else if (msg.type === 'notification' && msg.data === 'You are connected!') {
-        console.log('App have got handshake from the chat server!')
         setTimeout( 
           () => {
             this.chatBoard.removeChild(this.chatBoard.firstChild) // Connecting image
@@ -164,14 +177,18 @@ export default class Chat extends PWDWindow {
             this.messages.forEach( (msg) => this.displayMessage(msg))
           }, 1000 )
         } else  if (msg.type === 'message'){
-          console.log('Message from the ' + msg.username)
-          console.log('msg' + event.data)
           this.saveMessage (msg)
           this.displayMessage( msg )
         }
     }
   }
-
+  
+  /**
+  * Saving nickname to localstorage
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling of this and local storage
+  */
   saveNickname () {
     let nick = this.nickname.trim()
     if (nick.length > 0) {
@@ -183,6 +200,12 @@ export default class Chat extends PWDWindow {
     }
   }
 
+  /**
+  * Handling of GUI if connection was not established
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling DOM and this
+  */
   showDisconnected () {
     let icon = document.createElement('img')
     icon.classList.toggle('window-icon')
@@ -191,11 +214,24 @@ export default class Chat extends PWDWindow {
     this.windowHeader.appendChild(icon)
   } 
 
+  /**
+  * Handling of GUI when connection was established
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling DOM and this
+  */
   showConnected () {
     this.windowHeader.querySelector('.conn-icon').src = 'image/connected.png'
     this.startBtn.style.display = 'none'
   } 
 
+  /**
+  * Sending message to the server
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling DOM and this
+  *   
+  */
   sendMessage () {
     let msg = {
       type: 'message',
@@ -209,6 +245,12 @@ export default class Chat extends PWDWindow {
     this.msgInput.value = ''
   }
 
+  /**
+  * Dispalying message (any , fetched from local storage or new one)
+  *
+  * @param {Object} msg Object which contains message text and other data
+  * @returns {undefined} void, handling of DOM and local storage
+  */
   displayMessage (msg) {
     let text = msg.data
     let user = msg.username

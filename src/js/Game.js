@@ -29,8 +29,13 @@ export default class Game extends PWDWindow {
 
   }
   
+  /**
+  * Game beginning, handling of DOM
+  *
+  * @param {none} _ template defined in the index file
+  * @returns {undefined} void, handling of this and DOM
+  */
   begin () {
-    console.log('new Chat application')
     let holder = this.templ.querySelector('.window-content')
     let gameFrame = document.querySelector('#template-game').content.cloneNode(true)
     
@@ -54,8 +59,13 @@ export default class Game extends PWDWindow {
     this.context = this.canvas.getContext('2d')
   }
   
+  /**
+  * Game initialization
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling of this and DOM
+  */
   init () {
-    console.log('init()')
     this.goodShots = 0
 
     if (this.gameOver){
@@ -71,7 +81,6 @@ export default class Game extends PWDWindow {
     this.bookX = (this.canvas.width - this.bookWidth) / 2
 
     for (var k = 0; k < this.candlesNumber; k++){
-      console.log('Drawing candle n' + k)
       let candle = new Candle(this.candleXpositons[k], this.candleYpositons[k], true)
       this.candles.push(candle)
     }
@@ -79,6 +88,12 @@ export default class Game extends PWDWindow {
     this.animation = setInterval( () => {this.draw()}, 20) // 50 fps
   }
   
+  /**
+  * Drawing on the canvas 
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling of this and DOM
+  */
   draw () {
     if ( (this.x + this.deltaX > this.canvas.width-this.ballRadius) || (this.x + this.deltaX < this.ballRadius ) ) {
       this.deltaX = -this.deltaX
@@ -115,6 +130,12 @@ export default class Game extends PWDWindow {
     }
   }
 
+  /**
+  * Drawing the ball 
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling of this and DOM
+  */
   drawBall () {
     this.context.beginPath()
     this.context.arc(this.x, this.y, this.ballRadius, 0, Math.PI*2)
@@ -123,6 +144,12 @@ export default class Game extends PWDWindow {
     this.context.closePath()
   }
 
+  /**
+  * Drawing the book (just now it is just a rectangle, but planned to use an Image)
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling of this and DOM
+  */
   drawBook () {
     this.context.beginPath()
     this.context.rect(this.bookX, this.canvas.height - this.bookHeight, this.bookWidth, this.bookHeight)
@@ -131,6 +158,12 @@ export default class Game extends PWDWindow {
     this.context.closePath()
   }
 
+  /**
+  * Drawing of blinkikng candle lightss 
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling of this and DOM
+  */
   drawCandles() {
     if ( this.candles.length === 0) return 
     for(var i = 0; i < this.candlesNumber; i++) {
@@ -148,6 +181,12 @@ export default class Game extends PWDWindow {
     }
   }
 
+  /**
+  * Checking for collisions between the ball and candle lights 
+  *
+  * @param {none} _ this.* properties used
+  * @returns {undefined} void, handling of this and DOM
+  */
   checkCandlesCollision() {
     if ( this.candles.length === 0) return 
     for(var m = 0; m < this.candlesNumber; m++) {
@@ -159,31 +198,38 @@ export default class Game extends PWDWindow {
         ) {
           candle.active = false
           this.goodShots ++
-          console.log (this.goodShots + ' candles of ' + this.candlesNumber)
           this.deltaY = -this.deltaY
       }
     }
   }
   
+  /**
+  * Handling of game end 
+  *
+  * @param {Boolean} isWinnerFlag flag to handle winner / loser status
+  * @returns {undefined} void, handling of this and DOM
+  */
   endGame ( isWinnerFlag ) {
-
     this.gameOver = true
     this.candles = []
     this.deltaX = -2 
     this.deltaY = -1
     clearInterval(this.animation)
     this.startBtn.style.display = 'inline'
-    console.log('Game over, winner: ' + isWinnerFlag)
 
     let message = isWinnerFlag ? 'YOU WIN !' : 'YOU LOSE!'
 
     this.message(message, isWinnerFlag)
-
   }
 
+  /**
+  * GUI handling on game over
+  *
+  * @param {String} message text to be displayed for player
+  * @param {Boolean} winnerFlag to indicate is player winner or not
+  * @returns {undefined} void, handling of this
+  */
   message (message, winnerFlag) {
-    console.log('message, winner: ' + winnerFlag)
-
     let board = document.createElement('div')
     board.classList.toggle('memory-board')
 
