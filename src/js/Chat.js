@@ -134,7 +134,7 @@ export default class Chat extends PWDWindow {
     if (!this.chatBoard.classList.contains('.checking-holder')) {
       this.chatBoard.appendChild(infoBox)
     }
-    this.connection = new WebSocket(this.server)
+    this.connection = new window.WebSocket(this.server)
     this.connection.onerror = (event) => { console.log(this.domId + ' conection error' + event) }
     this.connection.onclose = (event) => {
       console.log('Chat ' + this.domId + ' connection closed')

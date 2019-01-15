@@ -47,7 +47,7 @@ OK. 39 commits
 
 The code standard standard.js should be followed. 
 (npm start will show errors if you are not complying)
-OK but Chat.js 137:27  error  'WebSocket' is not defined  no-undef 
+OK
 
 All Exported functions, classes and types should be commented. Perferably using JSDoc.
 OK
